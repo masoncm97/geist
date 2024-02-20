@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Message, { MessageInstance } from "@/components/Message";
+import axios from "axios";
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
@@ -14,6 +15,24 @@ export default function Home() {
       ...prevState,
       { outbound: true, message: input },
     ]);
+    setInput("");
+
+    const response = await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`,
+
+        { prompt: input }
+      )
+      .then((data) => {
+        console.log(data);
+      });
+
+    // .then((data) => {
+    //   setMessages((prevState) => [
+    //     ...prevState,
+    //     { outbound: false, message: data },
+    //   ]);
+    // });
     setInput("");
   };
 
