@@ -24,15 +24,11 @@ export default function Home() {
         { prompt: input }
       )
       .then((data) => {
-        console.log(data);
+        setMessages((prevState) => [
+          ...prevState,
+          { outbound: false, message: data.data.response },
+        ]);
       });
-
-    // .then((data) => {
-    //   setMessages((prevState) => [
-    //     ...prevState,
-    //     { outbound: false, message: data },
-    //   ]);
-    // });
     setInput("");
   };
 
