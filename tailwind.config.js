@@ -17,6 +17,9 @@ const config = {
       colors: {
         offwhite: "#ece5df",
         lemon: "#ffea14",
+        lightPink: "#eeb0cf",
+        lighterPink: "#f1dceb",
+        royalBlue: "#0D81FD",
       },
     },
   },
