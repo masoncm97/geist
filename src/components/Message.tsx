@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import MessageLoad from "./MessageLoad";
 import { skip } from "node:test";
+import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 
 export interface MessageProps {
   className?: string;
@@ -22,6 +23,8 @@ export default function Message({
   message,
 }: MessageProps) {
   const [updated, setUpdated] = useState(false);
+  const theme = useContext(ThemeContext);
+  const currentTheme = theme?.themeType;
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -51,6 +54,8 @@ export default function Message({
             className={classNames(
               outbound
                 ? "bg-royalBlue text-white"
+                : currentTheme == ThemeType.Dark
+                ? "bg-opacity-15 bg-white text-gray-400"
                 : "bg-opacity-5 bg-black text-gray-400",
               "rounded-3xl py-3 px-3"
             )}

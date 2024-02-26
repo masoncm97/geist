@@ -1,15 +1,17 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import Message, { MessageInstance } from "@/components/Message";
 import axios from "axios";
 import Image from "next/image";
 import SuggestionMessage from "@/components/SuggestionMessage";
 import { motion } from "framer-motion";
+import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
+import classNames from "classnames";
 
 export default function Home() {
   const initMessage =
-    "Greetings, my name is Geist. I am an expert on Hegel\u2019s \u2018Phenomenology of the Spirit\u2019. I\u2019m sure you have questions. Please, ask away";
+    "Greetings, my name is Geist. I am an LLM who has been trained extensively on Hegel\u2019s \u2018Phenomenology of the Spirit\u2019. I\u2019m sure you have questions. Please, ask away";
   const suggestionMessages = [
     "What does the term the \u2019unconditioned universal\u2019 mean to Hegel?",
     "Explain Hegel\u2019s conception of dialectic movement.",
@@ -21,8 +23,9 @@ export default function Home() {
   const scrollToRef = useRef<HTMLDivElement>(null);
   const messagesContainer = useRef<HTMLDivElement>(null);
   const [updated, setUpdated] = useState(false);
-
   const date = new Date();
+  const theme = useContext(ThemeContext);
+  const currentTheme = theme?.themeType;
 
   const handleUpdate = () => {
     setShouldScroll(true);
@@ -99,8 +102,20 @@ export default function Home() {
 
   return (
     <main className="flex h-screen flex-col items-center justify-between p-24">
-      <section className="relative border rounded-xl">
-        <div className="backdrop-blur-md bg-opacity-5 bg-black h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10">
+      <section
+        className={classNames(
+          currentTheme == ThemeType.Dark ? "border border-gray-500" : "border",
+          "relative border rounded-xl"
+        )}
+      >
+        <div
+          className={classNames(
+            currentTheme == ThemeType.Dark
+              ? "bg-opacity-15 bg-white"
+              : "bg-opacity-5 bg-black",
+            "backdrop-blur-md h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10"
+          )}
+        >
           <div className="relative h-16 w-16 place-self-center">
             <h2 className="text-white text-3xl absolute z-10 center-absolute">
               G
@@ -153,14 +168,18 @@ export default function Home() {
               <SuggestionMessage
                 key={index}
                 message={message}
-                setInput={setInput}
                 handleSubmit={handleSubmit}
               />
             ))}
           </motion.div>
         )}
         <form
-          className="backdrop-blur-md bg-opacity-5 bg-black grid grid-cols-[1fr,min-content] border-[1.5px] rounded-2xl absolute h-20 bottom-0 w-[95%] m-2 z-10"
+          className={classNames(
+            currentTheme == ThemeType.Dark
+              ? "border-[1.5px] border-gray-500 bg-opacity-15 bg-white"
+              : "border-[1.5px] bg-opacity-5 bg-black",
+            "backdrop-blur-md grid grid-cols-[1fr,min-content] rounded-2xl absolute h-20 bottom-0 w-[95%] m-2 z-10"
+          )}
           onSubmit={handleSubmit}
         >
           <textarea
