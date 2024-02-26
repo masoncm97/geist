@@ -1,35 +1,91 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Message, { MessageInstance } from "@/components/Message";
 import axios from "axios";
 import Image from "next/image";
+import SuggestionMessage from "@/components/SuggestionMessage";
+import { motion } from "framer-motion";
 
 export default function Home() {
+  const initMessage =
+    "Greetings, my name is Geist. I am an expert on Hegel\u2019s \u2018Phenomenology of the Spirit\u2019. I\u2019m sure you have questions. Please, ask away";
+  const suggestionMessages = [
+    "What does the term the \u2019unconditioned universal\u2019 mean to Hegel?",
+    "Explain Hegel\u2019s conception of dialectic movement.",
+  ];
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<MessageInstance[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [shouldScroll, setShouldScroll] = useState(false);
   const scrollToRef = useRef<HTMLDivElement>(null);
   const messagesContainer = useRef<HTMLDivElement>(null);
+  const [updated, setUpdated] = useState(false);
+
   const date = new Date();
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = () => {
+    setShouldScroll(true);
+  };
+
+  const handleSubmit = async (
+    e: FormEvent<HTMLFormElement>,
+    message?: string
+  ) => {
+    let prompt = message ? message : input;
     e.preventDefault();
     setMessages((prevState) => [
       ...prevState,
-      { outbound: true, message: input, loading: false },
+      {
+        outbound: true,
+        message: prompt,
+        loading: false,
+        skipUpdate: true,
+      },
       { outbound: false, loading: true },
     ]);
     setInput("");
+    setLoading(true);
     await axios
-      .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, { prompt: input })
+      .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, {
+        prompt: prompt,
+      })
       .then((data) => {
+        setShouldScroll(true);
         setMessages((prevState) => [
           ...prevState.slice(0, -1),
-          { outbound: false, loading: false, message: data.data.response },
+          {
+            outbound: false,
+            loading: false,
+            message: removeLenticularBrackets(data.data.response),
+          },
         ]);
       });
+    setLoading(false);
     setInput("");
   };
+
+  useEffect(() => {
+    if (!updated) {
+      setMessages([{ outbound: false, loading: true, skipUpdate: true }]);
+    }
+    let intervalId: NodeJS.Timeout;
+    intervalId = setInterval(() => {
+      setUpdated(true);
+      setMessages([
+        {
+          outbound: false,
+          loading: false,
+          message: initMessage,
+        },
+      ]);
+    }, 3000);
+
+    if (updated) {
+      clearInterval(intervalId);
+    }
+    return () => clearInterval(intervalId);
+  }, [updated]);
 
   useEffect(() => {
     if (scrollToRef.current) {
@@ -37,8 +93,9 @@ export default function Home() {
         behavior: "smooth",
         block: "center",
       });
+      setShouldScroll(false);
     }
-  }, [messages]);
+  }, [messages, loading, shouldScroll]);
 
   return (
     <main className="flex h-screen flex-col items-center justify-between p-24">
@@ -65,7 +122,7 @@ export default function Home() {
               className="flex flex-col overflow-y-auto no-scrollbar self-start h-[60vh] relative mb-2"
             >
               {messages.length != 0 && (
-                <p className="text-gray-400 text-sm text-center mt-245 md:mt-20 mb-2">
+                <p className="text-gray-400 text-sm text-center mt-245 md:mt-16 mb-2">
                   Today {formatDate(date)}
                 </p>
               )}
@@ -76,18 +133,39 @@ export default function Home() {
                   loading={message.loading}
                   outbound={message.outbound}
                   message={message.message}
+                  handleUpdate={handleUpdate}
+                  skipUpdate={message.skipUpdate}
                 />
               ))}
               <div ref={scrollToRef} />
             </div>
           </div>
         </div>
+        {updated && messages.length < 2 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="absolute w-full bottom-24 p-4 grid grid-rows-[min-content,1fr]"
+          >
+            <p className="text-royalBlue text-sm mb-2">Suggestions:</p>
+            {suggestionMessages.map((message, index) => (
+              <SuggestionMessage
+                key={index}
+                message={message}
+                setInput={setInput}
+                handleSubmit={handleSubmit}
+              />
+            ))}
+          </motion.div>
+        )}
         <form
           className="backdrop-blur-md bg-opacity-5 bg-black grid grid-cols-[1fr,min-content] border-[1.5px] rounded-2xl absolute h-20 bottom-0 w-[95%] m-2 z-10"
           onSubmit={handleSubmit}
         >
           <textarea
             value={input}
+            disabled={!updated}
             className={
               "bg-black bg-opacity-5 rounded-xl grid m-2 resize-none text-gray-400 p-2 no-scrollbar"
             }
@@ -118,3 +196,8 @@ function formatDate(date) {
   var strTime = hours + ":" + minutes + " " + ampm;
   return strTime;
 }
+
+const removeLenticularBrackets = (input: string): string => {
+  const regex = /【.*?†.*?】/g;
+  return input.replace(regex, "");
+};
