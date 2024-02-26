@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useEffect, useRef, useState } from "react";
 
 export interface MessageProps {
   className?: string;
@@ -12,18 +13,47 @@ export default function Message({
   outbound,
   message,
 }: MessageProps) {
-  console.log(message);
+  const initial = useRef(true);
+  const [delivered, setDelivered] = useState(false);
+  useEffect(() => {
+    if (outbound) {
+      let intervalId: NodeJS.Timeout;
+      if (initial) {
+        initial.current = false;
+        intervalId = setInterval(() => {
+          console.log("delivered");
+          setDelivered(true);
+        }, 1000);
+        if (delivered) {
+          clearInterval(intervalId);
+        }
+      }
+      return () => clearInterval(intervalId);
+    }
+  }, [delivered]);
+
   return (
     <div
+      key={`${delivered}`}
       className={classNames(
         className,
-        outbound
-          ? "bg-royalBlue text-white place-self-end"
-          : "bg-opacity-5 bg-black text-gray-400 place-self-start",
-        "rounded-3xl max-w-[80%] py-3 px-3 mb-3 mx-1"
+        outbound ? "place-self-end" : "place-self-start",
+        "max-w-[80%] mb-3 mx-1"
       )}
     >
-      {message}
+      <div
+        className={classNames(
+          outbound
+            ? "bg-royalBlue text-white"
+            : "bg-opacity-5 bg-black text-gray-400",
+          "rounded-3xl py-3 px-3"
+        )}
+      >
+        {message}
+      </div>
+      {outbound && delivered && (
+        <p className="text-xs text-end mr-1 mt-1 text-gray-400">Delivered</p>
+      )}
     </div>
   );
 }

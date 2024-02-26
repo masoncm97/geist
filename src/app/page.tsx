@@ -11,9 +11,7 @@ export default function Home() {
   const scrollToRef = useRef<HTMLDivElement>(null);
   const messagesContainer = useRef<HTMLDivElement>(null);
   const date = new Date();
-
   const handleSubmit = async (e) => {
-    console.log(input);
     e.preventDefault();
     setMessages((prevState) => [
       ...prevState,
@@ -57,21 +55,22 @@ export default function Home() {
               height={70}
             />
           </div>
-          <h2 className="text-gray-400 text-lg text-center">Geist</h2>
+          <h2 className="text-lg text-center text-gray-400">Geist</h2>
         </div>
         <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none">
           <div className="absolute flex-col bottom-2 w-[95%]">
             <div
               ref={messagesContainer}
-              className="flex flex-col overflow-y-auto no-scrollbar self-start max-h-[60vh] relative"
+              className="flex flex-col overflow-y-auto no-scrollbar self-start h-[60vh] relative mb-2"
             >
               {messages.length != 0 && (
-                <p className="text-gray-400 text-sm text-center mt-40 mb-2">
+                <p className="text-gray-400 text-sm text-center mt-245 md:mt-20 mb-2">
                   Today {formatDate(date)}
                 </p>
               )}
               {messages?.map((message, index) => (
                 <Message
+                  className={index == messages.length - 1 ? "mb-24" : "mb-2"}
                   key={index}
                   outbound={message.outbound}
                   message={message.message}
@@ -79,27 +78,29 @@ export default function Home() {
               ))}
               <div ref={scrollToRef} />
             </div>
-            <form
-              className="grid grid-cols-[1fr,min-content] border-[1.5px] rounded-2xl self-end bg-none"
-              onSubmit={handleSubmit}
-            >
-              <textarea
-                value={input}
-                className={"grid m-2 resize-none"}
-                onChange={(e) => setInput(e.target.value)}
-              ></textarea>
-              <button className={"flex w-10"} type="submit">
-                <Image
-                  className="m-auto"
-                  src="/submit-button.png"
-                  alt="profile"
-                  width={30}
-                  height={30}
-                />
-              </button>
-            </form>
           </div>
         </div>
+        <form
+          className="backdrop-blur-md bg-opacity-5 bg-black grid grid-cols-[1fr,min-content] border-[1.5px] rounded-2xl absolute h-20 bottom-0 w-[95%] m-2 z-10"
+          onSubmit={handleSubmit}
+        >
+          <textarea
+            value={input}
+            className={
+              "bg-black bg-opacity-5 rounded-xl grid m-2 resize-none text-gray-400 p-2 no-scrollbar"
+            }
+            onChange={(e) => setInput(e.target.value)}
+          ></textarea>
+          <button className={"flex w-10"} type="submit">
+            <Image
+              className="m-auto"
+              src="/submit-button.png"
+              alt="profile"
+              width={30}
+              height={30}
+            />
+          </button>
+        </form>
       </section>
     </main>
   );
