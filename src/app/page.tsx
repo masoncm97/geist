@@ -11,20 +11,21 @@ export default function Home() {
   const scrollToRef = useRef<HTMLDivElement>(null);
   const messagesContainer = useRef<HTMLDivElement>(null);
   const date = new Date();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessages((prevState) => [
       ...prevState,
-      { outbound: true, message: input },
+      { outbound: true, message: input, loading: false },
+      { outbound: false, loading: true },
     ]);
     setInput("");
-
     await axios
       .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, { prompt: input })
       .then((data) => {
         setMessages((prevState) => [
-          ...prevState,
-          { outbound: false, message: data.data.response },
+          ...prevState.slice(0, -1),
+          { outbound: false, loading: false, message: data.data.response },
         ]);
       });
     setInput("");
@@ -72,6 +73,7 @@ export default function Home() {
                 <Message
                   className={index == messages.length - 1 ? "mb-24" : "mb-2"}
                   key={index}
+                  loading={message.loading}
                   outbound={message.outbound}
                   message={message.message}
                 />
