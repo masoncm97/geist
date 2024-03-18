@@ -38,8 +38,9 @@ export default function MessageLoad() {
         "w-16 h-10 rounded-3xl flex justify-between px-2"
       )}
     >
-      {[1, 2, 3].map(() => (
+      {[1, 2, 3].map((index) => (
         <motion.div
+          key={index}
           variants={dot}
           className={classNames(
             currentTheme == ThemeType.Dark

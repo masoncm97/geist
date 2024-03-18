@@ -37,7 +37,7 @@ export default function Message({
       clearInterval(intervalId);
     }
     return () => clearInterval(intervalId);
-  }, [updated]);
+  }, [updated, outbound, skipUpdate, handleUpdate]);
 
   return (
     <div
