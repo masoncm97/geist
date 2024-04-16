@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
+import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ResponseTimingProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </ResponseTimingProvider>
       </body>
     </html>
   );

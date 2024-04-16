@@ -22,7 +22,7 @@ const dot = {
   },
 };
 
-export default function MessageLoad() {
+export default function MessageLoad({ className }: { className?: string }) {
   const theme = useContext(ThemeContext);
   const currentTheme = theme?.themeType;
 
@@ -35,7 +35,8 @@ export default function MessageLoad() {
         currentTheme == ThemeType.Dark
           ? "bg-opacity-15 bg-white"
           : "bg-opacity-5 bg-black",
-        "w-16 h-10 rounded-3xl flex justify-between px-2"
+        "w-16 h-10 rounded-3xl flex justify-between px-2",
+        className
       )}
     >
       {[1, 2, 3].map((index) => (
