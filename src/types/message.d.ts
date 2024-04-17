@@ -12,6 +12,7 @@ export interface MessageProps {
 }
 
 export interface ChatProps {
+  name: string;
   promptLoading: boolean;
   responseLoading: boolean;
   className?: string;

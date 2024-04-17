@@ -16,56 +16,20 @@ import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import classNames from "classnames";
 import { ChatInstance, MessageInstance } from "@/types/message";
 import { Chat } from "./Chat";
+import { PhoneContext } from "@/providers/PhoneContextProvider";
 
-export interface PhoneScreenProps {
+export interface PhoneProps {
   name: string;
   color: "green" | "pink";
   chats: ChatInstance[];
   isPrompter: boolean;
-  setChatRef: (node: HTMLDivElement | null, id: string) => void;
 }
-export default function PhoneScreen({
-  name,
-  color,
-  chats,
-  isPrompter,
-  setChatRef,
-}: PhoneScreenProps) {
-  const [input, setInput] = useState<string>("");
-  const [messages, setMessages] = useState<MessageInstance[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [shouldScroll, setShouldScroll] = useState(false);
-  const scrollToRef = useRef<HTMLDivElement>(null);
+export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
   const messagesContainer = useRef<HTMLDivElement>(null);
-  const [updated, setUpdated] = useState(false);
   const date = new Date();
   const theme = useContext(ThemeContext);
   const currentTheme = theme?.themeType;
-  const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-
-  // const handleUpdate = () => {
-  //   setShouldScroll(true);
-  // };
-
-  // async function scrollMessages() {
-  //   for (const ref of messageRefs.current) {
-  //     ref[1].scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "end",
-  //     });
-  //     await delay(2000); // Wait for 2 seconds before the next iteration
-  //   }
-  // }
-
-  useEffect(() => {
-    if (scrollToRef.current) {
-      scrollToRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      setShouldScroll(false);
-    }
-  }, [messages, loading, shouldScroll]);
+  const { setPhoneState } = useContext(PhoneContext);
 
   return (
     <section
@@ -100,13 +64,12 @@ export default function PhoneScreen({
             ref={messagesContainer}
             className="flex flex-col overflow-y-auto no-scrollbar self-start h-[60vh] relative mb-2"
           >
-            {messages.length != 0 && (
-              <p className="text-gray-400 text-sm text-center mt-245 md:mt-16 mb-2">
-                Today {formatDate(date)}
-              </p>
-            )}
+            <p className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2">
+              Today {formatDate(date)}
+            </p>
             {chats?.map((chat, index) => (
               <Chat
+                name={name}
                 key={index}
                 promptLoading={false}
                 responseLoading={false}
@@ -116,7 +79,11 @@ export default function PhoneScreen({
                 id={chat.id}
               />
             ))}
-            <div ref={(node) => setChatRef(node, name.toString())} />
+            <div
+              ref={(node) =>
+                setPhoneState(name, undefined, node ? node : undefined)
+              }
+            />
           </div>
         </div>
       </div>

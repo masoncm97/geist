@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
+import PhoneContextProvider from "@/providers/PhoneContextProvider";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ResponseTimingProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </ResponseTimingProvider>
+        <PhoneContextProvider>
+          <ResponseTimingProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </ResponseTimingProvider>
+        </PhoneContextProvider>
       </body>
     </html>
   );

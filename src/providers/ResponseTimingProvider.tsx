@@ -1,19 +1,7 @@
 "use client";
 
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
-
-export enum ThemeType {
-  Light,
-  Dark,
-}
 
 export interface ResponseTiming {
   chatId: number | undefined;
@@ -66,14 +54,6 @@ export default function ResponseTimingProvider({
 
     loadChat();
   }, [chatId]);
-
-  useEffect(() => {
-    console.log("response loading was changed");
-  }, [responseLoading]);
-
-  useEffect(() => {
-    console.log("prompt loading was changed");
-  }, [promptLoading]);
 
   return (
     <ResponseTimingContext.Provider value={responseTiming}>

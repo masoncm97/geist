@@ -1,21 +1,26 @@
 "use client";
 
-import PhoneScreen from "@/components/PhoneScreen";
+import Phone from "@/components/Phone";
 import { useInterval } from "@/hooks/useInterval";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ChatInstance } from "@/types/message";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
+import { PhoneContext, PhoneState } from "@/providers/PhoneContextProvider";
 
 export default function Phones() {
   let [chats, setChats] = useState<ChatInstance[]>([]);
   let [cursor, setCursor] = useState<number | undefined>(undefined);
+  let [paginating, setPaginating] = useState<boolean>(false);
   let latestChat = useRef<ChatInstance>();
   let initial = useRef<boolean>(true);
-  const chatWindowRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  let initial2 = useRef<boolean>(true);
+  const phoneStateRefs = useRef<Map<PhoneState, HTMLDivElement>>(new Map());
   const { responseLoading, promptLoading, resetResponseTiming } = useContext(
     ResponseTimingContext
   );
+
+  const { phoneStates, primaryIdInView } = useContext(PhoneContext);
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
@@ -46,7 +51,8 @@ export default function Phones() {
         cursor: cursor,
       })
       .then((data) => {
-        console.log(data);
+        let chats: ChatInstance[] = data.data.messages.slice(0, -1);
+        setChats((prevState) => [...chats, ...prevState]);
       });
   };
 
@@ -64,30 +70,68 @@ export default function Phones() {
 
   // If cursor has already been instantiated poll every 20 seconds for new chat
   useInterval(async () => {
-    if (cursor) getLatestChat();
+    if (cursor) {
+      getLatestChat();
+    }
   }, 20000);
 
   // Paginate old chats
   useEffect(() => {
-    if (cursor) {
-      getPreviousChats(cursor);
-    }
+    const getInitialChats = async () => {
+      if (cursor) {
+        console.log(cursor);
+        await getPreviousChats(cursor);
+      }
+    };
+    getInitialChats();
   }, [cursor]);
 
-  const setChatRef = useCallback((node: HTMLDivElement | null, id: string) => {
-    if (node !== null) {
-      chatWindowRefs.current.set(id, node);
-    }
-  }, []);
+  useEffect(() => {
+    const paginate = async () => {
+      console.log("cursor", cursor);
+      console.log("prim", primaryIdInView);
+
+      // if (initial2.current) {
+      //   await delayFn(5000, () => {
+      //     initial2.current = false;
+      //     console.log("delayed");
+      //   });
+      // }
+      if (
+        !paginating &&
+        cursor &&
+        primaryIdInView &&
+        primaryIdInView - cursor <= 5
+      ) {
+        setPaginating(true);
+        console.log("paginating");
+        setCursor(cursor - 10);
+        await getPreviousChats(cursor - 10);
+      }
+      setPaginating(false);
+    };
+
+    paginate();
+
+    window.addEventListener("scroll", paginate);
+
+    return () => {
+      window.removeEventListener("scroll", paginate);
+    };
+  }, [cursor, primaryIdInView]);
 
   useEffect(() => {
     async function scrollMessages() {
-      for (const [_, ref] of chatWindowRefs.current) {
-        ref.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-        });
-        await delay(2000);
+      console.log(phoneStates);
+      console.log(paginating);
+      if (!paginating) {
+        for (let [_, value] of phoneStates.entries()) {
+          // value?.scroller?.scrollIntoView({
+          //   behavior: "smooth",
+          //   block: "end",
+          // });
+          // await delay(2000);
+        }
       }
     }
     scrollMessages();
@@ -95,22 +139,13 @@ export default function Phones() {
 
   return (
     <>
-      <PhoneScreen
-        name="Sartre"
-        color="green"
-        chats={chats}
-        isPrompter={false}
-        setChatRef={setChatRef}
-      />
-      <PhoneScreen
-        name="Hegel"
-        color="pink"
-        chats={chats}
-        isPrompter={true}
-        setChatRef={setChatRef}
-      />
+      <Phone name="Sartre" color="green" chats={chats} isPrompter={false} />
+      <Phone name="Hegel" color="pink" chats={chats} isPrompter={true} />
     </>
   );
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const delayFn = (ms: number, fn: () => void) =>
+  new Promise(() => setTimeout(fn, ms));
