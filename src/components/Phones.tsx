@@ -1,12 +1,13 @@
 "use client";
 
-import Phone from "@/components/Phone";
+import Phone, { PhoneProps } from "@/components/Phone";
 import { useInterval } from "@/hooks/useInterval";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ChatInstance } from "@/types/message";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
 import { PhoneContext, PhoneState } from "@/providers/PhoneContextProvider";
+import useAccessPhoneStore from "@/hooks/usePhoneStore";
 
 export default function Phones() {
   let [chats, setChats] = useState<ChatInstance[]>([]);
@@ -14,13 +15,15 @@ export default function Phones() {
   let [paginating, setPaginating] = useState<boolean>(false);
   let latestChat = useRef<ChatInstance>();
   let initial = useRef<boolean>(true);
-  let initial2 = useRef<boolean>(true);
-  const phoneStateRefs = useRef<Map<PhoneState, HTMLDivElement>>(new Map());
   const { responseLoading, promptLoading, resetResponseTiming } = useContext(
     ResponseTimingContext
   );
+  let phones: PhoneProps[] = [
+    { name: "Sartre", color: "green", isPrompter: false },
+    { name: "Hegel", color: "pink", isPrompter: true },
+  ];
 
-  const { phoneStates, primaryIdInView } = useContext(PhoneContext);
+  const { updateChats, phoneStates } = useAccessPhoneStore();
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
@@ -35,10 +38,10 @@ export default function Phones() {
       latestChat.current != undefined &&
       !chats.find((chat) => chat.id === latestChat.current!.id)
     ) {
-      setChats((prevState) => [
-        ...prevState,
-        latestChat.current as ChatInstance,
-      ]);
+      phones.forEach((prop) => {
+        updateChats(prop.name, [latestChat.current] as ChatInstance[]);
+      });
+
       resetResponseTiming(latestChat.current.id);
     }
 
@@ -52,7 +55,9 @@ export default function Phones() {
       })
       .then((data) => {
         let chats: ChatInstance[] = data.data.messages.slice(0, -1);
-        setChats((prevState) => [...chats, ...prevState]);
+        phones.forEach((prop) => {
+          updateChats(prop.name, chats);
+        });
       });
   };
 
@@ -86,39 +91,33 @@ export default function Phones() {
     getInitialChats();
   }, [cursor]);
 
-  useEffect(() => {
-    const paginate = async () => {
-      console.log("cursor", cursor);
-      console.log("prim", primaryIdInView);
+  // useEffect(() => {
+  //   const paginate = async () => {
+  //     console.log("cursor", cursor);
+  //     console.log("prim", primaryIdInView);
 
-      // if (initial2.current) {
-      //   await delayFn(5000, () => {
-      //     initial2.current = false;
-      //     console.log("delayed");
-      //   });
-      // }
-      if (
-        !paginating &&
-        cursor &&
-        primaryIdInView &&
-        primaryIdInView - cursor <= 5
-      ) {
-        setPaginating(true);
-        console.log("paginating");
-        setCursor(cursor - 10);
-        await getPreviousChats(cursor - 10);
-      }
-      setPaginating(false);
-    };
+  //     // if (initial2.current) {
+  //     //   await delayFn(5000, () => {
+  //     //     initial2.current = false;
+  //     //     console.log("delayed");
+  //     //   });
+  //     // }
+  //     if (
+  //       !paginating &&
+  //       cursor &&
+  //       primaryIdInView &&
+  //       primaryIdInView - cursor <= 5
+  //     ) {
+  //       setPaginating(true);
+  //       console.log("paginating");
+  //       setCursor(cursor - 10);
+  //       await getPreviousChats(cursor - 10);
+  //     }
+  //     setPaginating(false);
+  //   };
 
-    paginate();
-
-    window.addEventListener("scroll", paginate);
-
-    return () => {
-      window.removeEventListener("scroll", paginate);
-    };
-  }, [cursor, primaryIdInView]);
+  //   paginate();
+  // }, [cursor, primaryIdInView]);
 
   useEffect(() => {
     async function scrollMessages() {
@@ -126,11 +125,11 @@ export default function Phones() {
       console.log(paginating);
       if (!paginating) {
         for (let [_, value] of phoneStates.entries()) {
-          // value?.scroller?.scrollIntoView({
-          //   behavior: "smooth",
-          //   block: "end",
-          // });
-          // await delay(2000);
+          value?.scroller?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+          await delay(2000);
         }
       }
     }
@@ -139,13 +138,16 @@ export default function Phones() {
 
   return (
     <>
-      <Phone name="Sartre" color="green" chats={chats} isPrompter={false} />
-      <Phone name="Hegel" color="pink" chats={chats} isPrompter={true} />
+      {phones.map((prop) => (
+        <Phone
+          key={prop.name}
+          name={prop.name}
+          color={prop.color}
+          isPrompter={prop.isPrompter}
+        />
+      ))}
     </>
   );
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const delayFn = (ms: number, fn: () => void) =>
-  new Promise(() => setTimeout(fn, ms));

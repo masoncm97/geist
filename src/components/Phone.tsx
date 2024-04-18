@@ -17,19 +17,27 @@ import classNames from "classnames";
 import { ChatInstance, MessageInstance } from "@/types/message";
 import { Chat } from "./Chat";
 import { PhoneContext } from "@/providers/PhoneContextProvider";
+import useAccessPhoneStore from "@/hooks/usePhoneStore";
 
 export interface PhoneProps {
   name: string;
   color: "green" | "pink";
-  chats: ChatInstance[];
+  chats?: ChatInstance[];
   isPrompter: boolean;
 }
+
 export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
   const messagesContainer = useRef<HTMLDivElement>(null);
   const date = new Date();
   const theme = useContext(ThemeContext);
   const currentTheme = theme?.themeType;
-  const { setPhoneState } = useContext(PhoneContext);
+  const scroller = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    updateScroller(name, scroller.current ? scroller.current : undefined);
+  }, [scroller]);
+
+  const { phoneStates, updateScroller } = useAccessPhoneStore();
 
   return (
     <section
@@ -67,7 +75,7 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
             <p className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2">
               Today {formatDate(date)}
             </p>
-            {chats?.map((chat, index) => (
+            {phoneStates.get(name)?.chats?.map((chat, index) => (
               <Chat
                 name={name}
                 key={index}
@@ -79,11 +87,7 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
                 id={chat.id}
               />
             ))}
-            <div
-              ref={(node) =>
-                setPhoneState(name, undefined, node ? node : undefined)
-              }
-            />
+            <div ref={scroller} />
           </div>
         </div>
       </div>

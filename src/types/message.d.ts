@@ -23,6 +23,10 @@ export interface ChatProps {
   id: number;
 }
 
+export interface Phone {
+  name: string;
+}
+
 export interface MessageInstance extends MessageProps {}
 
 export type ChatInstance = Pick<ChatProps, "id", "prompt", "response">;

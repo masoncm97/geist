@@ -6,6 +6,7 @@ import { Message } from "./Message";
 import MessageLoad from "./MessageLoad";
 import { PhoneContext } from "@/providers/PhoneContextProvider";
 import { useInView } from "framer-motion";
+import useAccessPhoneStore from "@/hooks/usePhoneStore";
 
 export function Chat({
   className,
@@ -23,26 +24,26 @@ export function Chat({
     ResponseTimingContext
   );
 
-  const { setPhoneState } = useContext(PhoneContext);
+  const { updateIdInView } = useAccessPhoneStore();
 
   const latestChat = chatId === id;
 
   useEffect(() => {
     if (isInView) {
-      setPhoneState(name, id);
+      updateIdInView(name, id);
     }
   }, [isInView]);
 
   return (
     <div ref={ref} className={classNames(className, "mx-1 grid")}>
       {/* Loading Bubbles between chat instances */}
-      {latestChat && promptLoading && (
+      {/* {latestChat && promptLoading && (
         <MessageLoad
           className={classNames(
             isPrompter ? "place-self-end" : "place-self-start"
           )}
         />
-      )}
+      )} */}
       {/* Chat Prompt instance */}
       {(!latestChat || !promptLoading) && (
         <Message
