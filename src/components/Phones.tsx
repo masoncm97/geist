@@ -8,13 +8,14 @@ import { ChatInstance } from "@/types/message";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
 import { PhoneContext, PhoneState } from "@/providers/PhoneContextProvider";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
+import { useInitialRender } from "@/hooks/useInitialRender";
 
 export default function Phones() {
-  let [chats, setChats] = useState<ChatInstance[]>([]);
-  let [cursor, setCursor] = useState<number | undefined>(undefined);
-  let [paginating, setPaginating] = useState<boolean>(false);
   let latestChat = useRef<ChatInstance>();
-  let initial = useRef<boolean>(true);
+  let [cursorInitialized, setCursorInitialized] = useState<boolean>(false);
+  let [shouldPaginate, setShouldPaginate] = useState<boolean>(false);
+  const [fetchedInitChat, paginateInit] = useInitialRender(4);
+  // const idsInView: number[] = [];
   const { responseLoading, promptLoading, resetResponseTiming } = useContext(
     ResponseTimingContext
   );
@@ -23,51 +24,101 @@ export default function Phones() {
     { name: "Hegel", color: "pink", isPrompter: true },
   ];
 
-  const { updateChats, phoneStates } = useAccessPhoneStore();
+  const {
+    updateChats,
+    phoneStates,
+    updateCursor,
+    updatePaginating,
+    getIdsInView,
+    getCursors,
+  } = useAccessPhoneStore();
+
+  let idsInView = getIdsInView();
+  let cursors = getCursors();
+  // let [cursors, setCursors] = useState<(number | undefined)[]>(
+  //   new Array<number | undefined>(idsInView.length)
+  // );
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
       .get(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`)
       .then((data) => {
+        console.log(data);
         latestChat.current = data.data;
       });
 
     /* If the server returns a new chat that hasn't been displayed yet, 
       add it to the current chats */
-    if (
-      latestChat.current != undefined &&
-      !chats.find((chat) => chat.id === latestChat.current!.id)
-    ) {
-      phones.forEach((prop) => {
-        updateChats(prop.name, [latestChat.current] as ChatInstance[]);
-      });
-
-      resetResponseTiming(latestChat.current.id);
-    }
+    phoneStates.forEach(async (value: PhoneState, key: string) => {
+      if (
+        latestChat.current != undefined &&
+        !value.chats?.find((chat) => chat.id === latestChat.current?.id)
+      ) {
+        updateChats(key, [latestChat.current] as ChatInstance[], "append");
+        resetResponseTiming(latestChat.current.id);
+      }
+    });
 
     return latestChat.current?.id;
   };
 
-  const getPreviousChats = async (cursor: number) => {
+  const getPreviousChats = async (cursor: number, name?: string) => {
     await axios
       .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/paginate-chat`, {
         cursor: cursor,
       })
       .then((data) => {
         let chats: ChatInstance[] = data.data.messages.slice(0, -1);
-        phones.forEach((prop) => {
-          updateChats(prop.name, chats);
+        console.log("fuck", chats);
+        if (name) {
+          updateChats(name, chats, "prepend");
+          return;
+        }
+
+        phoneStates.forEach(async (_, key: string) => {
+          updateChats(key, chats, "prepend");
         });
       });
   };
 
-  // Get Latest Chat on Start
+  useEffect(() => {
+    const paginate = async () => {
+      if (cursorInitialized) {
+        phoneStates.forEach(async (value: PhoneState, key: string) => {
+          console.log(value.idInView);
+          console.log(value.cursor);
+          if (value.idInView && value.cursor) {
+            console.log(value.cursor - value.idInView >= 7);
+          }
+          // console.log(value.idInView - value.cursor <= 5);
+          if (
+            value.idInView &&
+            value.cursor &&
+            value.cursor - value.idInView >= 7
+          ) {
+            console.log("fuckkkk");
+            console.log(value.cursor - value.idInView >= 7);
+            updateCursor(key, value.cursor - 10);
+            await getPreviousChats(value.cursor - 10, key);
+          }
+        });
+      }
+    };
+    paginate();
+  }, [idsInView]);
+
   useEffect(() => {
     const instantiateChat = async () => {
-      if (initial.current) {
-        initial.current = false;
-        let cursor = await getLatestChat();
-        if (cursor) setCursor(cursor);
+      if (!fetchedInitChat?.current) {
+        let initCursor = await getLatestChat();
+        console.log("updating cursor");
+        phoneStates.forEach(async (_, key: string) => {
+          if (typeof initCursor === "number") {
+            updateCursor(key, initCursor);
+          }
+        });
+        setCursorInitialized(true);
+        fetchedInitChat.current = true;
       }
     };
     instantiateChat();
@@ -75,66 +126,64 @@ export default function Phones() {
 
   // If cursor has already been instantiated poll every 20 seconds for new chat
   useInterval(async () => {
-    if (cursor) {
+    if (fetchedInitChat.current) {
+      console.log("polling for latest chat");
       getLatestChat();
     }
   }, 20000);
 
-  // Paginate old chats
+  // Paginate initial chats
   useEffect(() => {
     const getInitialChats = async () => {
-      if (cursor) {
-        console.log(cursor);
-        await getPreviousChats(cursor);
-      }
+      phoneStates.forEach(async (value: PhoneState, key: string) => {
+        if (value.cursor) {
+          await getPreviousChats(value.cursor, key);
+        }
+      });
     };
     getInitialChats();
-  }, [cursor]);
+  }, [cursorInitialized]);
 
-  // useEffect(() => {
-  //   const paginate = async () => {
-  //     console.log("cursor", cursor);
-  //     console.log("prim", primaryIdInView);
+  useEffect(() => {
+    const paginate = async () => {
+      // if (!paginateInit.current) {
+      //   await delayFn(5000, () => {
+      //     paginateInit.current = true;
+      //     console.log("delayed");
+      //   });
+      // }
 
-  //     // if (initial2.current) {
-  //     //   await delayFn(5000, () => {
-  //     //     initial2.current = false;
-  //     //     console.log("delayed");
-  //     //   });
-  //     // }
-  //     if (
-  //       !paginating &&
-  //       cursor &&
-  //       primaryIdInView &&
-  //       primaryIdInView - cursor <= 5
-  //     ) {
-  //       setPaginating(true);
-  //       console.log("paginating");
-  //       setCursor(cursor - 10);
-  //       await getPreviousChats(cursor - 10);
-  //     }
-  //     setPaginating(false);
-  //   };
+      if (shouldPaginate) {
+        console.log("checking pagination", phoneStates);
+        phoneStates.forEach(async (value: PhoneState, key: string) => {
+          if (!value.paginating && value.idInView && value.cursor) {
+            console.log("paginating");
+            // updatePaginating(key, true);
+            updateCursor(key, value.cursor - 10);
+            await getPreviousChats(value.cursor - 10, key);
+          }
+          // updatePaginating(key, false);
+          // setShouldPaginate(false);
+        });
+      }
+    };
 
-  //   paginate();
-  // }, [cursor, primaryIdInView]);
+    paginate();
+  }, [shouldPaginate]);
 
   useEffect(() => {
     async function scrollMessages() {
-      console.log(phoneStates);
-      console.log(paginating);
-      if (!paginating) {
-        for (let [_, value] of phoneStates.entries()) {
-          value?.scroller?.scrollIntoView({
-            behavior: "smooth",
-            block: "end",
-          });
-          await delay(2000);
-        }
+      console.log("should scroll");
+      for (let [_, value] of phoneStates.entries()) {
+        value?.scroller?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+        await delay(2000);
       }
     }
     scrollMessages();
-  }, [chats, responseLoading, promptLoading]);
+  }, [responseLoading, promptLoading]);
 
   return (
     <>
@@ -151,3 +200,6 @@ export default function Phones() {
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const delayFn = (ms: number, fn: () => void) =>
+  new Promise(() => setTimeout(fn, ms));

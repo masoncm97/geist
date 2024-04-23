@@ -30,6 +30,7 @@ export function Chat({
 
   useEffect(() => {
     if (isInView) {
+      console.log("name", name, "id", id);
       updateIdInView(name, id);
     }
   }, [isInView]);

@@ -42,7 +42,7 @@ export default function ResponseTimingProvider({
   };
 
   let promptDelay = 5000;
-  let responseDelay = 5000;
+  let responseDelay = 10000;
 
   useEffect(() => {
     let loadChat = async () => {
