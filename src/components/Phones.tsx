@@ -45,7 +45,7 @@ export default function Phones() {
           key,
           "chats",
           [latestChat.current] as ChatInstance[],
-          "append"
+          "prepend"
         );
         resetResponseTiming(latestChat.current.id);
       }
@@ -60,15 +60,15 @@ export default function Phones() {
         cursor: cursor,
       })
       .then((data) => {
-        let chats: ChatInstance[] = data.data.messages.slice(0, -1);
+        let chats: ChatInstance[] = data.data.messages.reverse();
         console.log("fuck", chats);
         if (name) {
-          updatePhoneState(name, "chats", chats, "prepend");
+          updatePhoneState(name, "chats", chats, "append");
           return;
         }
 
         phoneStates.forEach(async (_, key: string) => {
-          updatePhoneState(key, "chats", chats, "prepend");
+          updatePhoneState(key, "chats", chats, "append");
         });
       });
   };
@@ -78,6 +78,7 @@ export default function Phones() {
       if (fetchedInitChat.current) {
         phoneStates.forEach(async (value: PhoneState, key: string) => {
           if (value.cursor && value.shouldPaginate) {
+            console.log("paginating");
             updatePhoneState(key, "shouldPaginate", false);
             updatePhoneState(key, "cursor", value.cursor - 10);
             await getPreviousChats(value.cursor - 10, key);
