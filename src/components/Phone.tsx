@@ -36,27 +36,17 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
 
-  const {
-    phoneStates,
-    // updateScroller,
-    // updatePaginator,
-    // updatePaginatorInView,
-    updatePhoneState,
-  } = useAccessPhoneStore();
+  const { phoneStates, updatePhoneState } = useAccessPhoneStore();
 
   useEffect(() => {
-    // updateScroller(name, scroller.current ? scroller.current : undefined);
     updatePhoneState(
       name,
       "scroller",
       scroller.current ? scroller.current : undefined
     );
-    // updatePaginator(name, paginator ? paginator : undefined);
-    // updatePhoneState(name, "paginator", paginator ? paginator : undefined);
   }, [scroller]);
 
   useEffect(() => {
-    console.log("paginator", isInView);
     updatePhoneState(name, "shouldPaginate", isInView);
   }, [isInView]);
 

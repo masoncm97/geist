@@ -2,22 +2,17 @@
 
 import Phone, { PhoneProps } from "@/components/Phone";
 import { useInterval } from "@/hooks/useInterval";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import { ChatInstance } from "@/types/message";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
-import { useInitialRender } from "@/hooks/useInitialRender";
-import { useInView } from "framer-motion";
-import { useInViewGroup } from "@/hooks/useInViewGroup";
 import { PhoneState } from "@/store/store";
 
 export default function Phones() {
   let latestChat = useRef<ChatInstance>();
-  let [cursorInitialized, setCursorInitialized] = useState<boolean>(false);
-  // let [shouldPaginate, setShouldPaginate] = useState<boolean>(false);
-  const [fetchedInitChat, paginateInit] = useInitialRender(4);
-  // const idsInView: number[] = [];
+  const fetchedInitChat = useRef<boolean>();
+
   const { responseLoading, promptLoading, resetResponseTiming } = useContext(
     ResponseTimingContext
   );
@@ -26,28 +21,10 @@ export default function Phones() {
     { name: "Hegel", color: "pink", isPrompter: true },
   ];
 
-  const {
-    // updateChats,
-    phoneStates,
-    // updateCursor,
-    // updatePaginating,
-    // getIdsInView,
-    // getCursors,
-    // getPaginators,
-    getPhoneStateValues,
-    updatePhoneState,
-  } = useAccessPhoneStore();
+  const { phoneStates, getPhoneStateValues, updatePhoneState } =
+    useAccessPhoneStore();
 
-  // const paginators = getPaginators();
-
-  // const group = useInViewGroup(paginators);
-
-  let idsInView = getPhoneStateValues("idInView");
   let shouldPaginate = getPhoneStateValues("shouldPaginate");
-
-  // let [cursors, setCursors] = useState<(number | undefined)[]>(
-  //   new Array<number | undefined>(idsInView.length)
-  // );
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
@@ -64,7 +41,6 @@ export default function Phones() {
         latestChat.current != undefined &&
         !value.chats?.find((chat) => chat.id === latestChat.current?.id)
       ) {
-        // updateChats(key, [latestChat.current] as ChatInstance[], "append");
         updatePhoneState(
           key,
           "chats",
@@ -98,10 +74,6 @@ export default function Phones() {
   };
 
   useEffect(() => {
-    console.log("should paginate", shouldPaginate);
-  }, [shouldPaginate]);
-
-  useEffect(() => {
     const paginate = async () => {
       if (fetchedInitChat.current) {
         phoneStates.forEach(async (value: PhoneState, key: string) => {
@@ -120,13 +92,11 @@ export default function Phones() {
     const instantiateChat = async () => {
       if (!fetchedInitChat?.current) {
         let initCursor = await getLatestChat();
-        console.log("updating cursor");
         phoneStates.forEach(async (_, key: string) => {
           if (typeof initCursor === "number") {
             updatePhoneState(key, "cursor", initCursor);
           }
         });
-        setCursorInitialized(true);
         fetchedInitChat.current = true;
       }
     };
@@ -140,34 +110,6 @@ export default function Phones() {
       getLatestChat();
     }
   }, 20000);
-
-  // // Paginate initial chats
-  // useEffect(() => {
-  //   const getInitialChats = async () => {
-  //     phoneStates.forEach(async (value: PhoneState, key: string) => {
-  //       if (value.cursor) {
-  //         await getPreviousChats(value.cursor, key);
-  //       }
-  //     });
-  //   };
-  //   getInitialChats();
-  // }, [cursorInitialized]);
-
-  // useEffect(() => {
-  //   const paginate = async () => {
-  //     if (shouldPaginate) {
-  //       console.log("checking pagination", phoneStates);
-  //       phoneStates.forEach(async (value: PhoneState, key: string) => {
-  //         if (!value.paginating && value.idInView && value.cursor) {
-  //           updateCursor(key, value.cursor - 10);
-  //           await getPreviousChats(value.cursor - 10, key);
-  //         }
-  //       });
-  //     }
-  //   };
-
-  //   paginate();
-  // }, [shouldPaginate]);
 
   useEffect(() => {
     async function scrollMessages() {
@@ -198,6 +140,3 @@ export default function Phones() {
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const delayFn = (ms: number, fn: () => void) =>
-  new Promise(() => setTimeout(fn, ms));
