@@ -1,15 +1,19 @@
 import { ChatInstance } from "@/types/message";
+import { RefObject } from "react";
 import { create } from "zustand";
-import { useShallow } from "zustand/react/shallow";
 
 type MergeStrategy = "replace" | "append" | "prepend";
 
-type PhoneState = {
+export type PhoneState = {
   chats?: ChatInstance[];
+  paginatedChats?: ChatInstance[];
   cursor?: number;
   paginating?: boolean;
+  shouldPaginate?: boolean;
+  paginator?: RefObject<HTMLDivElement>;
   idInView?: number;
   scroller?: HTMLDivElement;
+  paginatorInView?: boolean;
 };
 
 type PhoneStates = {
@@ -17,74 +21,36 @@ type PhoneStates = {
 };
 
 type PhoneActions = {
-  updateIdInView: (name: string, idInView?: number) => void;
-  updateScroller: (name: string, scroller?: HTMLDivElement) => void;
-  updateCursor: (name: string, cursor?: number) => void;
-  updatePaginating: (name: string, paginating: boolean) => void;
-  updateChats: (
+  updatePhoneState: (
     name: string,
-    chats: ChatInstance[],
-    mergeStrategy: MergeStrategy
+    key: keyof PhoneState,
+    value: any,
+    mergeStrategy?: MergeStrategy
   ) => void;
-  getIdsInView: () => number[];
-  getCursors: () => number[];
+  getPhoneStateValues: <K extends keyof PhoneState>(key: K) => PhoneState[K][];
 };
 
 export type PhoneStore = PhoneStates & PhoneActions;
 
 export const usePhoneStore = create<PhoneStore>()((set, get) => ({
   phoneStates: new Map<string, PhoneState>(),
-  getIdsInView: () => {
-    return Array.from(get().phoneStates.values())
-      .map((state) => state.idInView)
-      .filter((id): id is number => id !== undefined);
-  },
-  getCursors: () => {
-    return Array.from(get().phoneStates.values())
-      .map((state) => state.cursor)
-      .filter((cursor): cursor is number => cursor !== undefined);
-  },
-  updateIdInView: (name, idInView) =>
+  updatePhoneState: (name, key, value, mergeStrategy = "replace") =>
     set((state) => ({
       phoneStates: updatePhoneState(
         name,
-        "idInView",
-        idInView,
-        state.phoneStates
-      ),
-    })),
-  updateCursor: (name, cursor) =>
-    set((state) => ({
-      phoneStates: updatePhoneState(name, "cursor", cursor, state.phoneStates),
-    })),
-  updatePaginating: (name, paginating) =>
-    set((state) => ({
-      phoneStates: updatePhoneState(
-        name,
-        "paginating",
-        paginating,
-        state.phoneStates
-      ),
-    })),
-  updateScroller: (name, scroller) =>
-    set((state) => ({
-      phoneStates: updatePhoneState(
-        name,
-        "scroller",
-        scroller,
-        state.phoneStates
-      ),
-    })),
-  updateChats: (name, chats, mergeStrategy) =>
-    set((state) => ({
-      phoneStates: updatePhoneState(
-        name,
-        "chats",
-        chats,
+        key,
+        value,
         state.phoneStates,
         mergeStrategy
       ),
     })),
+  getPhoneStateValues: (key) => {
+    return Array.from(get().phoneStates.values())
+      .map((state) => state[key])
+      .filter(
+        (value): value is NonNullable<typeof value> => value !== undefined
+      );
+  },
 }));
 
 function updatePhoneState<K extends keyof PhoneState, V extends PhoneState[K]>(
@@ -94,7 +60,6 @@ function updatePhoneState<K extends keyof PhoneState, V extends PhoneState[K]>(
   phoneStates: Map<string, PhoneState>,
   mergeStrategy: MergeStrategy = "replace"
 ): Map<string, PhoneState> {
-  // console.log("updating phone state");
   const existingEntry = phoneStates.get(name);
 
   // Default value is 'false' for pagination state

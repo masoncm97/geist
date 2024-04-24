@@ -16,8 +16,9 @@ import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import classNames from "classnames";
 import { ChatInstance, MessageInstance } from "@/types/message";
 import { Chat } from "./Chat";
-import { PhoneContext } from "@/providers/PhoneContextProvider";
+// import { PhoneContext } from "@/providers/PhoneContextProvider";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
+import { useInView } from "framer-motion";
 
 export interface PhoneProps {
   name: string;
@@ -32,12 +33,32 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
   const theme = useContext(ThemeContext);
   const currentTheme = theme?.themeType;
   const scroller = useRef<HTMLDivElement>(null);
+  const paginator = useRef<HTMLDivElement>(null);
+  const isInView = useInView(paginator);
+
+  const {
+    phoneStates,
+    // updateScroller,
+    // updatePaginator,
+    // updatePaginatorInView,
+    updatePhoneState,
+  } = useAccessPhoneStore();
 
   useEffect(() => {
-    updateScroller(name, scroller.current ? scroller.current : undefined);
+    // updateScroller(name, scroller.current ? scroller.current : undefined);
+    updatePhoneState(
+      name,
+      "scroller",
+      scroller.current ? scroller.current : undefined
+    );
+    // updatePaginator(name, paginator ? paginator : undefined);
+    // updatePhoneState(name, "paginator", paginator ? paginator : undefined);
   }, [scroller]);
 
-  const { phoneStates, updateScroller } = useAccessPhoneStore();
+  useEffect(() => {
+    console.log("paginator", isInView);
+    updatePhoneState(name, "shouldPaginate", isInView);
+  }, [isInView]);
 
   return (
     <section
@@ -72,7 +93,10 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
             ref={messagesContainer}
             className="flex flex-col overflow-y-auto no-scrollbar self-start h-[60vh] relative mb-2"
           >
-            <p className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2">
+            <p
+              ref={paginator}
+              className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2"
+            >
               Today {formatDate(date)}
             </p>
             {phoneStates.get(name)?.chats?.map((chat, index) => (

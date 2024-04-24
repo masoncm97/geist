@@ -6,14 +6,16 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ChatInstance } from "@/types/message";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
-import { PhoneContext, PhoneState } from "@/providers/PhoneContextProvider";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { useInitialRender } from "@/hooks/useInitialRender";
+import { useInView } from "framer-motion";
+import { useInViewGroup } from "@/hooks/useInViewGroup";
+import { PhoneState } from "@/store/store";
 
 export default function Phones() {
   let latestChat = useRef<ChatInstance>();
   let [cursorInitialized, setCursorInitialized] = useState<boolean>(false);
-  let [shouldPaginate, setShouldPaginate] = useState<boolean>(false);
+  // let [shouldPaginate, setShouldPaginate] = useState<boolean>(false);
   const [fetchedInitChat, paginateInit] = useInitialRender(4);
   // const idsInView: number[] = [];
   const { responseLoading, promptLoading, resetResponseTiming } = useContext(
@@ -25,16 +27,24 @@ export default function Phones() {
   ];
 
   const {
-    updateChats,
+    // updateChats,
     phoneStates,
-    updateCursor,
-    updatePaginating,
-    getIdsInView,
-    getCursors,
+    // updateCursor,
+    // updatePaginating,
+    // getIdsInView,
+    // getCursors,
+    // getPaginators,
+    getPhoneStateValues,
+    updatePhoneState,
   } = useAccessPhoneStore();
 
-  let idsInView = getIdsInView();
-  let cursors = getCursors();
+  // const paginators = getPaginators();
+
+  // const group = useInViewGroup(paginators);
+
+  let idsInView = getPhoneStateValues("idInView");
+  let shouldPaginate = getPhoneStateValues("shouldPaginate");
+
   // let [cursors, setCursors] = useState<(number | undefined)[]>(
   //   new Array<number | undefined>(idsInView.length)
   // );
@@ -54,7 +64,13 @@ export default function Phones() {
         latestChat.current != undefined &&
         !value.chats?.find((chat) => chat.id === latestChat.current?.id)
       ) {
-        updateChats(key, [latestChat.current] as ChatInstance[], "append");
+        // updateChats(key, [latestChat.current] as ChatInstance[], "append");
+        updatePhoneState(
+          key,
+          "chats",
+          [latestChat.current] as ChatInstance[],
+          "append"
+        );
         resetResponseTiming(latestChat.current.id);
       }
     });
@@ -71,41 +87,34 @@ export default function Phones() {
         let chats: ChatInstance[] = data.data.messages.slice(0, -1);
         console.log("fuck", chats);
         if (name) {
-          updateChats(name, chats, "prepend");
+          updatePhoneState(name, "chats", chats, "prepend");
           return;
         }
 
         phoneStates.forEach(async (_, key: string) => {
-          updateChats(key, chats, "prepend");
+          updatePhoneState(key, "chats", chats, "prepend");
         });
       });
   };
 
   useEffect(() => {
+    console.log("should paginate", shouldPaginate);
+  }, [shouldPaginate]);
+
+  useEffect(() => {
     const paginate = async () => {
-      if (cursorInitialized) {
+      if (fetchedInitChat.current) {
         phoneStates.forEach(async (value: PhoneState, key: string) => {
-          console.log(value.idInView);
-          console.log(value.cursor);
-          if (value.idInView && value.cursor) {
-            console.log(value.cursor - value.idInView >= 7);
-          }
-          // console.log(value.idInView - value.cursor <= 5);
-          if (
-            value.idInView &&
-            value.cursor &&
-            value.cursor - value.idInView >= 7
-          ) {
-            console.log("fuckkkk");
-            console.log(value.cursor - value.idInView >= 7);
-            updateCursor(key, value.cursor - 10);
+          if (value.cursor && value.shouldPaginate) {
+            updatePhoneState(key, "shouldPaginate", false);
+            updatePhoneState(key, "cursor", value.cursor - 10);
             await getPreviousChats(value.cursor - 10, key);
           }
         });
       }
     };
     paginate();
-  }, [idsInView]);
+  }, [shouldPaginate]);
 
   useEffect(() => {
     const instantiateChat = async () => {
@@ -114,7 +123,7 @@ export default function Phones() {
         console.log("updating cursor");
         phoneStates.forEach(async (_, key: string) => {
           if (typeof initCursor === "number") {
-            updateCursor(key, initCursor);
+            updatePhoneState(key, "cursor", initCursor);
           }
         });
         setCursorInitialized(true);
@@ -132,44 +141,33 @@ export default function Phones() {
     }
   }, 20000);
 
-  // Paginate initial chats
-  useEffect(() => {
-    const getInitialChats = async () => {
-      phoneStates.forEach(async (value: PhoneState, key: string) => {
-        if (value.cursor) {
-          await getPreviousChats(value.cursor, key);
-        }
-      });
-    };
-    getInitialChats();
-  }, [cursorInitialized]);
+  // // Paginate initial chats
+  // useEffect(() => {
+  //   const getInitialChats = async () => {
+  //     phoneStates.forEach(async (value: PhoneState, key: string) => {
+  //       if (value.cursor) {
+  //         await getPreviousChats(value.cursor, key);
+  //       }
+  //     });
+  //   };
+  //   getInitialChats();
+  // }, [cursorInitialized]);
 
-  useEffect(() => {
-    const paginate = async () => {
-      // if (!paginateInit.current) {
-      //   await delayFn(5000, () => {
-      //     paginateInit.current = true;
-      //     console.log("delayed");
-      //   });
-      // }
+  // useEffect(() => {
+  //   const paginate = async () => {
+  //     if (shouldPaginate) {
+  //       console.log("checking pagination", phoneStates);
+  //       phoneStates.forEach(async (value: PhoneState, key: string) => {
+  //         if (!value.paginating && value.idInView && value.cursor) {
+  //           updateCursor(key, value.cursor - 10);
+  //           await getPreviousChats(value.cursor - 10, key);
+  //         }
+  //       });
+  //     }
+  //   };
 
-      if (shouldPaginate) {
-        console.log("checking pagination", phoneStates);
-        phoneStates.forEach(async (value: PhoneState, key: string) => {
-          if (!value.paginating && value.idInView && value.cursor) {
-            console.log("paginating");
-            // updatePaginating(key, true);
-            updateCursor(key, value.cursor - 10);
-            await getPreviousChats(value.cursor - 10, key);
-          }
-          // updatePaginating(key, false);
-          // setShouldPaginate(false);
-        });
-      }
-    };
-
-    paginate();
-  }, [shouldPaginate]);
+  //   paginate();
+  // }, [shouldPaginate]);
 
   useEffect(() => {
     async function scrollMessages() {
