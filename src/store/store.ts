@@ -6,6 +6,7 @@ type MergeStrategy = "replace" | "append" | "prepend";
 
 export type PhoneState = {
   chats?: ChatInstance[];
+  head?: number;
   cursor?: number;
   shouldPaginate?: boolean;
   idInView?: number;
