@@ -41,7 +41,8 @@ export function Chat({
       {latestChat && promptLoading && (
         <MessageLoad
           className={classNames(
-            isPrompter ? "place-self-end" : "place-self-start"
+            isPrompter ? "place-self-end" : "place-self-start",
+            "mb-2"
           )}
         />
       )}
@@ -62,7 +63,8 @@ export function Chat({
       {latestChat && !promptLoading && responseLoading && (
         <MessageLoad
           className={classNames(
-            isPrompter ? "place-self-start" : "place-self-end"
+            isPrompter ? "place-self-start" : "place-self-end",
+            "mb-2"
           )}
         />
       )}
@@ -71,7 +73,7 @@ export function Chat({
         <Message
           className={classNames(
             isPrompter ? "place-self-start" : "place-self-end",
-            "max-w-[85%]"
+            "max-w-[85%] mb-2"
           )}
           outbound={!isPrompter}
           message={response}
@@ -83,7 +85,8 @@ export function Chat({
       {latestChat && !responseLoading && !promptLoading && (
         <MessageLoad
           className={classNames(
-            isPrompter ? "place-self-end" : "place-self-start"
+            isPrompter ? "place-self-end" : "place-self-start",
+            "mb-2"
           )}
         />
       )}
