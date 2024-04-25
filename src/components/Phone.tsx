@@ -1,22 +1,10 @@
 "use client";
 
-import {
-  FormEvent,
-  MutableRefObject,
-  RefObject,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Message } from "@/components/Message";
-import axios from "axios";
+import { useContext, useEffect, useRef } from "react";
 import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import classNames from "classnames";
-import { ChatInstance, MessageInstance } from "@/types/message";
+import { ChatInstance } from "@/types/message";
 import { Chat } from "./Chat";
-// import { PhoneContext } from "@/providers/PhoneContextProvider";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { useInView } from "framer-motion";
 
@@ -27,9 +15,8 @@ export interface PhoneProps {
   isPrompter: boolean;
 }
 
-export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
+export default function Phone({ name, color, isPrompter }: PhoneProps) {
   const messagesContainer = useRef<HTMLDivElement>(null);
-  const date = new Date();
   const theme = useContext(ThemeContext);
   const currentTheme = theme?.themeType;
   const scroller = useRef<HTMLDivElement>(null);
@@ -99,23 +86,10 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
             <p
               ref={paginator}
               className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2 h-2 w-full"
-            >
-              {/* Today {formatDate(date)} */}
-            </p>
+            ></p>
           </div>
         </div>
       </div>
     </section>
   );
-}
-
-function formatDate(date) {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? "pm" : "am";
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  var strTime = hours + ":" + minutes + " " + ampm;
-  return strTime;
 }

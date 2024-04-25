@@ -6,14 +6,10 @@ type MergeStrategy = "replace" | "append" | "prepend";
 
 export type PhoneState = {
   chats?: ChatInstance[];
-  paginatedChats?: ChatInstance[];
   cursor?: number;
-  paginating?: boolean;
   shouldPaginate?: boolean;
-  paginator?: RefObject<HTMLDivElement>;
   idInView?: number;
   scroller?: HTMLDivElement;
-  paginatorInView?: boolean;
 };
 
 type PhoneStates = {
@@ -61,12 +57,6 @@ function updatePhoneState<K extends keyof PhoneState, V extends PhoneState[K]>(
   mergeStrategy: MergeStrategy = "replace"
 ): Map<string, PhoneState> {
   const existingEntry = phoneStates.get(name);
-
-  // Default value is 'false' for pagination state
-  if (key === "paginating" && !value) {
-    phoneStates.set(name, { [key]: false });
-    return phoneStates;
-  }
 
   // If entry doesn't exist add it to the map
   if (!existingEntry) {
