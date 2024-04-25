@@ -79,9 +79,16 @@ export default function Phones() {
         phoneStates.forEach(async (value: PhoneState, key: string) => {
           if (value.cursor && value.shouldPaginate) {
             console.log("paginating");
+            let cursor;
+            if (value.cursor === latestChat.current.id) {
+              console.log("yes", latestChat.current.id);
+              cursor = value.cursor - 1;
+            } else {
+              cursor = value.cursor - 10;
+            }
             updatePhoneState(key, "shouldPaginate", false);
-            updatePhoneState(key, "cursor", value.cursor - 10);
-            await getPreviousChats(value.cursor - 10, key);
+            updatePhoneState(key, "cursor", cursor);
+            await getPreviousChats(cursor, key);
           }
         });
       }

@@ -77,11 +77,11 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
         </div>
         <h2 className="text-lg text-center text-gray-400">{name}</h2>
       </div>
-      <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto">
-        <div className="absolute flex-col top-2 w-[95%] border border-blue-500">
+      <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
+        <div className="absolute flex-col top-2 w-[95%]">
           <div
             ref={messagesContainer}
-            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[300vh] relative mb-2 border border-red-500"
+            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[300vh] relative mb-2"
           >
             <div ref={scroller} />
             {phoneStates.get(name)?.chats?.map((chat, index) => (
@@ -98,7 +98,7 @@ export default function Phone({ name, color, chats, isPrompter }: PhoneProps) {
             ))}
             <p
               ref={paginator}
-              className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2 border border-green-500 h-2 w-full"
+              className="text-gray-400 text-sm text-center mt-24 md:mt-20 mb-2 h-2 w-full"
             >
               {/* Today {formatDate(date)} */}
             </p>
