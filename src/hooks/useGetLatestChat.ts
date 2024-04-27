@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
-import { delay } from "@/util/util";
 import { useInterval } from "./useInterval";
 import { ChatInstance } from "@/types/message";
 import { PhoneState } from "@/store/store";
@@ -13,8 +12,7 @@ export function useGetLatestChat() {
 
   const { resetResponseTiming } = useContext(ResponseTimingContext);
 
-  const { phoneStates, getPhoneStateValues, updatePhoneState } =
-    useAccessPhoneStore();
+  const { phoneStates, updatePhoneState } = useAccessPhoneStore();
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios

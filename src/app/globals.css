@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .center-horizontal {
-  @apply left-1/2 transform -translate-x-1/2;
+  @apply max-md:left-1/2 max-md:transform max-md:-translate-x-1/2;
 }
 
 .center-absolute {

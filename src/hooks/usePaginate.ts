@@ -1,7 +1,7 @@
 import { PhoneState } from "@/store/store";
 import { ChatInstance } from "@/types/message";
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
 
 export function usePaginate() {
