@@ -30,8 +30,8 @@ export default function Phones() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full">
+    <div className="flex flex-col h-screen border border-green-500">
+      <div className="bg-green-200 relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 max-md:max-h-[70vh] h-full">
         {phones.map((prop) => (
           <Phone
             key={prop.name}
@@ -42,7 +42,7 @@ export default function Phones() {
           />
         ))}
       </div>
-      <div className="flex justify-around mb-5 xs:mb-10">
+      <div className="bg-red-500 flex justify-around mb-5 xs:mb-10">
         <div
           className={classNames(
             currentTheme == ThemeType.Dark
