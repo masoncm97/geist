@@ -36,7 +36,7 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
       <div
         className={classNames(
           currentTheme.themeType == ThemeType.Dark ? "bg-black" : "bg-white",
-          "h-[100%] w-screen"
+          "border border-red-500 w-screen overflow-hidden"
         )}
       >
         {children}
