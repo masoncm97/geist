@@ -73,7 +73,7 @@ export default function Phone({
         </div>
         <h2 className="text-lg text-center text-gray-400">{name}</h2>
       </div>
-      <div className="border-t-0 w-80 h-[80vh] md:h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
+      <div className="border-t-0 w-80 h-[50vh] md:h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
         <div className="absolute flex-col top-2 w-[95%]">
           <div
             ref={messagesContainer}
