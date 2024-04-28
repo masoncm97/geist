@@ -31,7 +31,7 @@ export default function Phones() {
 
   return (
     <div className="flex flex-col h-screen border border-green-500">
-      <div className="bg-green-200 relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 max-md:max-h-[70vh] h-full">
+      <div className="bg-green-200 relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full">
         {phones.map((prop) => (
           <Phone
             key={prop.name}

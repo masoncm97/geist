@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-hidden">
         <ResponseTimingProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </ResponseTimingProvider>
