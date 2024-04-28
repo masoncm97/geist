@@ -58,13 +58,13 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10"
+          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10"
         )}
       >
         <div
           className={classNames(
             color == "green" ? "bg-green-200" : "bg-pink-200",
-            "relative h-16 w-16 place-self-center rounded-full"
+            "hidden sm:flex relative h-16 w-16 place-self-center rounded-full"
           )}
         >
           <h2 className={"text-white text-3xl absolute z-10 center-absolute"}>
