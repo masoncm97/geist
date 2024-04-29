@@ -26,10 +26,10 @@ export default function Phones() {
   return (
     <div className="min-h-screen relative">
       {infoVisible && <Information />}
-      <div className="fixed md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full w-full">
+      <div className="fixed md:flex md:items-center md:justify-center gap-24 p-10 md:px-24 md:pt-24 h-screen w-screen">
         <button
           onClick={() => setInfoVisible((prev) => !prev)}
-          className="text-gray-400 md:fixed top-10 right-16"
+          className="hidden md:block text-gray-400 md:fixed top-16 right-24"
         >
           Information
         </button>

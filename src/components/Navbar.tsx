@@ -18,7 +18,7 @@ export default function Navbar() {
       </div>
       <div className="block md:hidden justify-self-end col-span-2 mr-2 text-right">
         {isOpen && (
-          <div>
+          <div className="flex flex-col">
             <button onClick={() => toggleSelected()} className="text-gray-400">
               Toggle View
             </button>
