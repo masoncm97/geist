@@ -3,7 +3,8 @@ import Hamburger from "./Hamburger";
 import { NavbarContext } from "@/providers/NavbarProvider";
 
 export default function Navbar() {
-  const { isOpen, setIsOpen, toggleNavbar } = React.useContext(NavbarContext);
+  const { isOpen, setIsOpen, toggleSelected, setInfoVisible } =
+    React.useContext(NavbarContext);
   return (
     <>
       <div className="block md:hidden justify-self-end self-center">
@@ -17,10 +18,15 @@ export default function Navbar() {
       <div className="block md:hidden justify-self-end col-span-2 mr-2 text-right">
         {isOpen && (
           <div>
-            <p onClick={() => toggleNavbar()} className="text-gray-400">
+            <p onClick={() => toggleSelected()} className="text-gray-400">
               Toggle View
             </p>
-            <p className="text-gray-400">Information</p>
+            <p
+              onClick={() => setInfoVisible((prev) => !prev)}
+              className="text-gray-400"
+            >
+              Information
+            </p>
           </div>
         )}
       </div>

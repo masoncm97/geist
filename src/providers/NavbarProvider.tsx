@@ -8,12 +8,14 @@ import {
   useState,
 } from "react";
 import { ResponseTimingContext } from "./ResponseTimingProvider";
+import Information from "@/components/Information";
 
 export interface Navbar {
   selected: string;
-  toggleNavbar: () => void;
+  toggleSelected: () => void;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setInfoVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 interface NavbarProviderProps {
@@ -22,17 +24,19 @@ interface NavbarProviderProps {
 
 export const NavbarContext = createContext<Navbar>({
   selected: "Sartre",
-  toggleNavbar: () => {},
+  toggleSelected: () => {},
   isOpen: false,
   setIsOpen: () => {},
+  setInfoVisible: () => {},
 });
 
 export default function NavbarProvider({ children }: NavbarProviderProps) {
   let [selected, setSelected] = useState<string>("Sartre");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [infoVisible, setInfoVisible] = useState<boolean>(false);
   const { clearResponseTiming } = useContext(ResponseTimingContext);
 
-  let toggleNavbar = () => {
+  let toggleSelected = () => {
     if (selected == "Hegel") {
       setSelected("Sartre");
     } else {
@@ -43,12 +47,16 @@ export default function NavbarProvider({ children }: NavbarProviderProps) {
 
   let navbar: Navbar = {
     selected: selected,
-    toggleNavbar: toggleNavbar,
+    toggleSelected: toggleSelected,
     isOpen: isOpen,
     setIsOpen: setIsOpen,
+    setInfoVisible: setInfoVisible,
   };
 
   return (
-    <NavbarContext.Provider value={navbar}>{children}</NavbarContext.Provider>
+    <NavbarContext.Provider value={navbar}>
+      {infoVisible && <Information />}
+      {children}
+    </NavbarContext.Provider>
   );
 }
