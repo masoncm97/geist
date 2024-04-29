@@ -85,6 +85,10 @@ export default function Phone({
       </div>
       <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
         <div className="absolute flex-col top-2 w-[95%]">
+          {(!phoneStates.get(name)?.chats ||
+            phoneStates.get(name)?.chats?.length === 0) && (
+            <div className="absolute loader border-gray-500 mt-52 left-[40%]" />
+          )}
           <div
             ref={messagesContainer}
             className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[9999vh] relative mb-2"
