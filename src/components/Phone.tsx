@@ -104,7 +104,7 @@ export default function Phone({
         <div className="absolute flex-col top-2 w-[95%]">
           <div
             ref={messagesContainer}
-            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[300vh] relative mb-2"
+            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[999999vh] relative mb-2"
           >
             <div ref={scroller} />
             {phoneStates.get(name)?.chats?.map((chat, index) => (
