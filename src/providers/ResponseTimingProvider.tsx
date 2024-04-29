@@ -6,6 +6,7 @@ import classNames from "classnames";
 export interface ResponseTiming {
   chatId: number | undefined;
   resetResponseTiming: (id?: number) => void;
+  clearResponseTiming: () => void;
   promptLoading: boolean;
   responseLoading: boolean;
 }
@@ -17,6 +18,7 @@ interface ResponseTimingProviderProps {
 export const ResponseTimingContext = createContext<ResponseTiming>({
   chatId: undefined,
   resetResponseTiming: (id?: number) => {},
+  clearResponseTiming: () => {},
   promptLoading: false,
   responseLoading: false,
 });
@@ -34,10 +36,16 @@ export default function ResponseTimingProvider({
     if (id) setChatId(id);
   }, []);
 
+  const clearResponseTiming = useCallback(() => {
+    setPromptLoading(false);
+    setResponseLoading(false);
+  }, []);
+
   const responseTiming: ResponseTiming = {
     chatId: chatId,
     promptLoading: promptLoading,
     resetResponseTiming: resetResponseTiming,
+    clearResponseTiming: clearResponseTiming,
     responseLoading: responseLoading,
   };
 

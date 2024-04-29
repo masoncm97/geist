@@ -17,11 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="overflow-hidden">
-        <NavbarProvider>
-          <ResponseTimingProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </ResponseTimingProvider>
-        </NavbarProvider>
+        <ResponseTimingProvider>
+          <ThemeProvider>
+            <NavbarProvider>{children}</NavbarProvider>
+          </ThemeProvider>
+        </ResponseTimingProvider>
       </body>
     </html>
   );
