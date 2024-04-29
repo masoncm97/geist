@@ -10,6 +10,7 @@ export function useAutoScroll() {
   const { responseLoading, promptLoading } = useContext(ResponseTimingContext);
   const { selected } = useContext(NavbarContext);
   const { phoneStates } = useAccessPhoneStore();
+  const { infoVisible } = useContext(NavbarContext);
   const deviceSize = useDeviceSize();
 
   useEffect(() => {
@@ -18,6 +19,10 @@ export function useAutoScroll() {
 
   useEffect(() => {
     async function scrollMessages() {
+      if (infoVisible) {
+        return;
+      }
+
       if (deviceSize && deviceSize < DeviceSize.md) {
         let selectedPhone = Array.from(phoneStates.entries()).find(
           ([key, _]) => key == selected

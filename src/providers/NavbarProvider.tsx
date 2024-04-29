@@ -14,6 +14,7 @@ export interface Navbar {
   selected: string;
   toggleSelected: () => void;
   isOpen: boolean;
+  infoVisible: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setInfoVisible: Dispatch<SetStateAction<boolean>>;
 }
@@ -26,6 +27,7 @@ export const NavbarContext = createContext<Navbar>({
   selected: "Sartre",
   toggleSelected: () => {},
   isOpen: false,
+  infoVisible: false,
   setIsOpen: () => {},
   setInfoVisible: () => {},
 });
@@ -50,13 +52,11 @@ export default function NavbarProvider({ children }: NavbarProviderProps) {
     toggleSelected: toggleSelected,
     isOpen: isOpen,
     setIsOpen: setIsOpen,
+    infoVisible,
     setInfoVisible: setInfoVisible,
   };
 
   return (
-    <NavbarContext.Provider value={navbar}>
-      {infoVisible && <Information />}
-      {children}
-    </NavbarContext.Provider>
+    <NavbarContext.Provider value={navbar}>{children}</NavbarContext.Provider>
   );
 }

@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import classNames from "classnames";
 import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import { NavbarContext } from "@/providers/NavbarProvider";
+import Information from "./Information";
 
 export default function Phones() {
   let phones: PhoneProps[] = [
@@ -16,14 +17,22 @@ export default function Phones() {
   ];
   const theme = useContext(ThemeContext);
   const { selected } = useContext(NavbarContext);
+  const { infoVisible, setInfoVisible } = useContext(NavbarContext);
 
   useAutoScroll();
   usePaginate();
   useGetLatestChat();
 
   return (
-    <div className="flex flex-col h-screen border">
-      <div className="relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full">
+    <div className="min-h-screen relative">
+      {infoVisible && <Information />}
+      <div className="fixed md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full w-full">
+        <button
+          onClick={() => setInfoVisible((prev) => !prev)}
+          className="text-gray-400 md:fixed top-10 right-16"
+        >
+          Information
+        </button>
         {phones.map((prop) => (
           <Phone
             key={prop.name}

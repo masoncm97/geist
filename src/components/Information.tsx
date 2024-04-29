@@ -5,9 +5,9 @@ import Exit from "./Exit";
 export default function Information() {
   const { setInfoVisible } = React.useContext(NavbarContext);
   return (
-    <div className="w-screen h-screen backdrop-blur-lg absolute z-[100] grid grid-rows-[min-content,1fr]">
+    <div className="backdrop-blur-lg absolute z-[100] grid grid-rows-[min-content,1fr] overflow-y-auto">
       <Exit trigger={() => setInfoVisible((prev) => !prev)}></Exit>
-      <div className="flex flex-col p-5 gap-5">
+      <div className="flex flex-col p-5 gap-5 md:px-20">
         <p className="text-gray-600 text-2xl">Geist</p>
         <p className="text-gray-600 text-lg">
           &apos;Geist&apos;: /ɡaɪst/

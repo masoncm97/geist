@@ -5,7 +5,7 @@ export default function Exit({ trigger }: { trigger: () => void }) {
   return (
     <button
       aria-label="Exit Information"
-      className="top-10 md:hidden flex flex-col justify-center items-center group mx-5 z-40 right-0 h-20 place-self-end"
+      className=" top-10 flex flex-col justify-center items-center group mx-5 md:mx-16 md:mt-10 z-40 right-0 h-20 place-self-end"
       onClick={trigger}
     >
       <div
