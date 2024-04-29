@@ -14,17 +14,18 @@ export default function Information() {
           <br /> From German Geist (“spirit, ghost, mind”)
         </p>
         <p className="text-gray-600 text-lg">
-          The project 'Geist' represents an investigation into the capabilities
-          of artificially intelligent reasoning and deduction. The oft-posited
-          question of determining the degree of conscious life enjoyed by AI
-          models is disregarded. With our only usfeul metric for determing
-          consciousness continuing to be 'cogito ero sum', and without a current
-          model for comparing an AI's 'thought' processes to our own, it quickly
-          becomes apparent that even if AI does attain some semblance of
-          consciousness, it would be impossible to discern its true character.
-          Thus, rather than trying to prove 'consciousness', this investigation
-          seeks to undestand whether artificial intelligence can produce novel
-          insight into the concept of 'consciousness'. <br />
+          The project &apos;Geist&apos; represents an investigation into the
+          capabilities of artificially intelligent reasoning and deduction. The
+          oft-posited question of determining the degree of conscious life
+          enjoyed by AI models is disregarded. With our only usfeul metric for
+          determing consciousness continuing to be &apos;cogito ero sum&apos;,
+          and without a current model for comparing an AI&apos;s
+          &apos;thought&apos; processes to our own, it quickly becomes apparent
+          that even if AI does attain some semblance of consciousness, it would
+          be impossible to discern its true character. Thus, rather than trying
+          to prove &apos;consciousness&apos;, this investigation seeks to
+          undestand whether artificial intelligence can produce novel insight
+          into the concept of 'consciousness'. <br />
         </p>
         <p className="text-gray-600 text-xl">Background</p>
         <p className="text-gray-600 text-lg">
