@@ -8,6 +8,8 @@ import { Chat } from "./Chat";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { useInView } from "framer-motion";
 import Hamburger from "./Hamburger";
+import NavbarProvider, { NavbarContext } from "@/providers/NavbarProvider";
+import Navbar from "./Navbar";
 
 export interface PhoneProps {
   name: string;
@@ -29,8 +31,8 @@ export default function Phone({
   const scroller = useRef<HTMLDivElement>(null);
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { isOpen, setIsOpen } = useContext(NavbarContext);
   const { phoneStates, updatePhoneState } = useAccessPhoneStore();
 
   useEffect(() => {
@@ -60,13 +62,13 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 max-md:grid-cols-2 p-5"
+          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 max-md:grid-cols-2 grid-rows-[1fr,min-content] grid-cols-none"
         )}
       >
         <div
           className={classNames(
             color == "green" ? "bg-green-200" : "bg-pink-200",
-            "flex relative h-16 w-16 place-self-center rounded-full justify-self-start self-center"
+            "flex relative h-16 w-16 place-self-center rounded-full justify-self-start md:justify-self-center self-center max-md:ml-5"
           )}
         >
           <h2
@@ -80,25 +82,10 @@ export default function Phone({
             {name}
           </h2>
         </div>
-        <h2 className="hidden md:block text-lg text-center text-gray-400">
+        <h2 className="hidden md:block text-lg text-center text-gray-400 -translate-y-2">
           {name}
         </h2>
-        <div className="block md:hidden justify-self-end self-center">
-          <Hamburger
-            isOpen={isOpen}
-            triggerMobileNav={() => {
-              setIsOpen((prevState) => !prevState);
-            }}
-          />
-        </div>
-        <div className="justify-self-end col-span-2 mr-2 text-right">
-          {isOpen && (
-            <div>
-              <p className="text-gray-400">Toggle View</p>
-              <p className="text-gray-400">Information</p>
-            </div>
-          )}
-        </div>
+        <Navbar />
       </div>
       <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
         <div className="absolute flex-col top-2 w-[95%]">

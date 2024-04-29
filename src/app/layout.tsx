@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
+import NavbarProvider from "@/providers/NavbarProvider";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="overflow-hidden">
-        <ResponseTimingProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </ResponseTimingProvider>
+        <NavbarProvider>
+          <ResponseTimingProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </ResponseTimingProvider>
+        </NavbarProvider>
       </body>
     </html>
   );
