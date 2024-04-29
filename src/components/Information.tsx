@@ -16,7 +16,8 @@ export default function Information() {
   return (
     <div
       className={classNames(
-        "backdrop-blur-lg absolute z-[100] grid grid-rows-[min-content,1fr] overflow-y-auto no-scrollbar"
+        "absolute z-[100] grid grid-rows-[min-content,1fr] overflow-y-auto no-scrollbar",
+        theme.themeType == ThemeType.Dark ? "bg-black" : "bg-white"
       )}
     >
       <Exit
