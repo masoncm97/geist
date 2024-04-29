@@ -11,14 +11,11 @@ import { NavbarContext } from "@/providers/NavbarProvider";
 
 export default function Phones() {
   let phones: PhoneProps[] = [
-    { name: "Sartre", color: "green", isPrompter: false },
-    { name: "Hegel", color: "pink", isPrompter: true },
+    { name: "Sartre", color: "green", isPrompter: true },
+    { name: "Hegel", color: "pink", isPrompter: false },
   ];
-
-  // let [selected, setSelected] = useState<string>("Hegel");
   const theme = useContext(ThemeContext);
   const { selected } = useContext(NavbarContext);
-  const currentTheme = theme?.themeType;
 
   useAutoScroll();
   usePaginate();

@@ -15,17 +15,10 @@ export default function Information() {
         </p>
         <p className="text-gray-600 text-lg">
           The project &apos;Geist&apos; represents an investigation into the
-          capabilities of artificially intelligent reasoning and deduction. The
-          oft-posited question of determining the degree of conscious life
-          enjoyed by AI models is disregarded. With our only usfeul metric for
-          determing consciousness continuing to be &apos;cogito ero sum&apos;,
-          and without a current model for comparing an AI&apos;s
-          &apos;thought&apos; processes to our own, it quickly becomes apparent
-          that even if AI does attain some semblance of consciousness, it would
-          be impossible to discern its true character. Thus, rather than trying
-          to prove &apos;consciousness&apos;, this investigation seeks to
-          undestand whether artificial intelligence can produce novel insight
-          into the concept of &apos;consciousness&apos;. <br />
+          capabilities of artificially intelligent reasoning and deduction,
+          specifically, to determine whether or not artificially intelligent
+          models can produce novel insight into the concept of
+          &apos;consciousness&apos;. <br />
         </p>
         <p className="text-gray-600 text-xl">Background</p>
         <p className="text-gray-600 text-lg">
@@ -45,35 +38,37 @@ export default function Information() {
           what revelations it has yet to uncover.
         </p>
         <p className="text-gray-600 text-lg">
-          The question of consciousness in AI is an illusory one, for as stated
-          previously, without a useful metric for consciousness that can be
-          applied uniformly across human and machine modalities, the degree to
-          which an AI is consciousness cannot be easily described. As a proxy
-          for this fundamental question, we choose to ask the AI to determine
-          for itself &apos;What is consciousness?&apos;, with the underlying
-          motive that if AI is able to conceive of testable hypotheses
-          describing the nature of consciousness, and these hypotheses can be
-          mapped into verifiable concepts that composite human consciousness,
-          perhaps we can begin to describe AI systems as emerging into our
-          current conception consciousness, or perhaps even a consciousness of
-          their own.
+          The question of whether or not AI can be considered conscious is an
+          illusory one. With our only usfeul metric for determing consciousness
+          continuing to be &apos;cogito ero sum&apos;, and without a current
+          model for comparing an AI&apos;s &apos;thought&apos; processes to our
+          own, it quickly becomes apparent that even if AI does attain some
+          semblance of consciousness, it would be impossible to discern its true
+          character. As a proxy for this fundamental question, we choose to ask
+          the AI to determine for itself &apos;What is consciousness?&apos;,
+          with the underlying motive that if AI is able to conceive of testable
+          hypotheses describing the nature of consciousness, and if these
+          hypotheses can be mapped into verifiable concepts that composite human
+          consciousness, perhaps we can begin to describe AI systems as emerging
+          into our current conception consciousness, or maybe even a
+          consciousness of their own. <br />
         </p>
         <p className="text-gray-600 text-xl">Investigation</p>
         <p className="text-gray-600 text-lg">
           To this end, two OpenAI gpt-3.5-turbo-0125 LLM&apos;s were each
           individually trained on the landmark works of two of the most
-          preeminent existential philosopher&apos;s: &apos;Being and
-          Nothingness&apos; by Jean-Paul Sartre and &apos;The Phenomenology of
-          Spirit&apos; by Georg Wilhelm Friedrich Hegel. The model
-          &apos;Sarte&apos; was trained on the entirety of the former, and the
-          model &apos;Hegel&apos; was trained on the entirety of the latter. A
+          preeminent existential philosophers: &apos;Being and Nothingness&apos;
+          by Jean-Paul Sartre and &apos;The Phenomenology of Spirit&apos; by
+          Georg Wilhelm Friedrich Hegel. The model named &apos;Sartre&apos; was
+          trained on the entirety of the former, and the model named
+          &apos;Hegel&apos; was trained on the entirety of the latter. A
           feedback loop is initiated by asking &apos;Hegel&apos; the initial
           prompt &apos;What is consciousness?&apos;. The returned answer is
           transformed to include a follow-up question using prompt injection,
           and is in turn delivered to &apos;Sartre&apos;, returning with a
           question of its own to be delivered to &apos;Hegel&apos;. The process
-          continues ad infinitum, with new responses being delivered every hour
-          between 8am-8pm UTC.
+          continues ad infinitum, with new responses being delivered once every
+          hour between 8am-8pm UTC.
         </p>
         <p className="text-gray-600 text-xl">Reflection</p>
         <p className="text-gray-600 text-lg">
