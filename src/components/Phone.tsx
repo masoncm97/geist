@@ -60,7 +60,7 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 border max-md:grid-cols-2 p-5"
+          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 max-md:grid-cols-2 p-5"
         )}
       >
         <div
