@@ -10,8 +10,8 @@ import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 
 export default function Phones() {
   let phones: PhoneProps[] = [
-    { name: "Sartre", color: "green", isPrompter: true },
-    { name: "Hegel", color: "pink", isPrompter: false },
+    { name: "Sartre", color: "green", isPrompter: false },
+    { name: "Hegel", color: "pink", isPrompter: true },
   ];
 
   let [selected, setSelected] = useState<string>("Hegel");
@@ -23,15 +23,15 @@ export default function Phones() {
   usePaginate();
   useGetLatestChat();
 
-  function closeDropdown(selected: string) {
-    console.log("yup");
-    setSelected(selected);
-    setCollapsed(true);
-  }
+  // function closeDropdown(selected: string) {
+  //   console.log("yup");
+  //   setSelected(selected);
+  //   setCollapsed(true);
+  // }
 
   return (
     <div className="flex flex-col h-screen border border-green-500">
-      <div className="bg-green-200 relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full">
+      <div className="relative overflow-hidden md:flex md:items-center md:justify-center gap-24 p-10 md:p-24 h-full">
         {phones.map((prop) => (
           <Phone
             key={prop.name}
@@ -42,7 +42,7 @@ export default function Phones() {
           />
         ))}
       </div>
-      <div className="bg-red-500 flex justify-around mb-5 xs:mb-10">
+      {/* <div className="bg-red-500 flex justify-around mb-5 xs:mb-10">
         <div
           className={classNames(
             currentTheme == ThemeType.Dark
@@ -85,7 +85,7 @@ export default function Phones() {
         >
           Info
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

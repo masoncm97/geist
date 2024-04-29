@@ -1,12 +1,13 @@
 "use client";
 
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import classNames from "classnames";
 import { ChatInstance } from "@/types/message";
 import { Chat } from "./Chat";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { useInView } from "framer-motion";
+import Hamburger from "./Hamburger";
 
 export interface PhoneProps {
   name: string;
@@ -28,6 +29,7 @@ export default function Phone({
   const scroller = useRef<HTMLDivElement>(null);
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { phoneStates, updatePhoneState } = useAccessPhoneStore();
 
@@ -58,20 +60,45 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10"
+          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 border max-md:grid-cols-2 p-5"
         )}
       >
         <div
           className={classNames(
             color == "green" ? "bg-green-200" : "bg-pink-200",
-            "hidden sm:flex relative h-16 w-16 place-self-center rounded-full"
+            "flex relative h-16 w-16 place-self-center rounded-full justify-self-start self-center"
           )}
         >
-          <h2 className={"text-white text-3xl absolute z-10 center-absolute"}>
+          <h2
+            className={
+              "hidden md:block text-white text-3xl absolute z-10 center-absolute"
+            }
+          >
             {name.slice(0, 1)}
           </h2>
+          <h2 className="block md:hidden text-white text-lg absolute z-10 center-absolute">
+            {name}
+          </h2>
         </div>
-        <h2 className="text-lg text-center text-gray-400">{name}</h2>
+        <h2 className="hidden md:block text-lg text-center text-gray-400">
+          {name}
+        </h2>
+        <div className="block md:hidden justify-self-end self-center">
+          <Hamburger
+            isOpen={isOpen}
+            triggerMobileNav={() => {
+              setIsOpen((prevState) => !prevState);
+            }}
+          />
+        </div>
+        <div className="justify-self-end col-span-2 mr-2 text-right">
+          {isOpen && (
+            <div>
+              <p className="text-gray-400">Toggle View</p>
+              <p className="text-gray-400">Information</p>
+            </div>
+          )}
+        </div>
       </div>
       <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
         <div className="absolute flex-col top-2 w-[95%]">
