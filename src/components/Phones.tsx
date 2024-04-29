@@ -24,7 +24,7 @@ export default function Phones() {
   useGetLatestChat();
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative no-scrollbar">
       {infoVisible && <Information />}
       <div className="fixed md:flex md:items-center md:justify-center gap-24 p-10 md:px-24 md:pt-24 h-screen w-screen">
         <button

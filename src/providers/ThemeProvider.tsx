@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import classNames from "classnames";
 
 export enum ThemeType {
@@ -22,7 +22,8 @@ export const ThemeContext = createContext<Theme>({
 
 const getIsDark = () => {
   const hours = new Date().getHours();
-  return hours < 7 || hours > 18;
+  // return hours < 7 || hours > 18;
+  return true;
 };
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
@@ -31,12 +32,26 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     ? { themeType: ThemeType.Dark }
     : { themeType: ThemeType.Light };
 
+  useEffect(() => {
+    // Set the background color when the component mounts
+    if (isDark) {
+      document.body.style.backgroundColor = "black";
+    } else {
+      document.body.style.backgroundColor = "white";
+    }
+
+    // Reset the background color when the component unmounts
+    return () => {
+      document.body.style.backgroundColor = "";
+    };
+  }, [isDark]);
+
   return (
     <ThemeContext.Provider value={currentTheme}>
       <div
         className={classNames(
           currentTheme.themeType == ThemeType.Dark ? "bg-black" : "bg-white",
-          "w-screen"
+          "w-screen no-scrollbar"
         )}
       >
         {children}
