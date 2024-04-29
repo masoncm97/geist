@@ -31,8 +31,6 @@ export default function Phone({
   const scroller = useRef<HTMLDivElement>(null);
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isOpen, setIsOpen } = useContext(NavbarContext);
   const { phoneStates, updatePhoneState } = useAccessPhoneStore();
 
   useEffect(() => {
