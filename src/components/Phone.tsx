@@ -58,7 +58,7 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 absolute w-full z-10 max-md:grid-cols-2 grid-rows-[1fr,min-content] grid-cols-none"
+          "backdrop-blur-md py-5 md:h-32 rounded-t-xl grid gap-2 absolute w-full z-10 max-md:grid-cols-2 grid-rows-[1fr,min-content] grid-cols-none"
         )}
       >
         <div
