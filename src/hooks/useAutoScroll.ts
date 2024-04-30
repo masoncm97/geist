@@ -41,7 +41,7 @@ export function useAutoScroll() {
             behavior: "smooth",
             block: "end",
           });
-          await delay(2000);
+          // await delay(2000);
         }
       }
     }
