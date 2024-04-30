@@ -58,13 +58,13 @@ export default function Phone({
           currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white"
             : "bg-opacity-5 bg-black",
-          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 py-2 absolute w-full z-10 max-md:grid-cols-2 grid-rows-[1fr,min-content] grid-cols-none"
+          "backdrop-blur-md md:h-32 rounded-t-xl grid gap-2 absolute w-full z-10 max-md:grid-cols-2 grid-rows-[1fr,min-content] grid-cols-none"
         )}
       >
         <div
           className={classNames(
             color == "green" ? "bg-green-200" : "bg-pink-200",
-            "flex relative h-16 w-16 place-self-center rounded-full justify-self-start md:justify-self-center self-center max-md:ml-5"
+            "backdrop-blur-md flex relative h-16 w-16 place-self-center rounded-full justify-self-start md:justify-self-center self-center max-md:ml-5"
           )}
         >
           <h2
@@ -74,7 +74,7 @@ export default function Phone({
           >
             {name.slice(0, 1)}
           </h2>
-          <h2 className="block md:hidden text-white text-lg absolute z-10 center-absolute">
+          <h2 className="backdrop-blur-md block md:hidden text-white text-lg absolute z-10 center-absolute">
             {name}
           </h2>
         </div>
@@ -91,7 +91,7 @@ export default function Phone({
           )}
           <div
             ref={messagesContainer}
-            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[9999vh] relative mb-2"
+            className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-full border border-red-500 relative mb-2"
           >
             <div ref={scroller} />
             {phoneStates.get(name)?.chats?.map((chat, index) => (

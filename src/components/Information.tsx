@@ -16,7 +16,7 @@ export default function Information() {
   return (
     <div
       className={classNames(
-        "absolute z-[100] grid grid-rows-[min-content,1fr] overflow-y-auto no-scrollbar",
+        "absolute z-[100] grid grid-rows-[min-content,1fr] overflow-y-auto",
         theme.themeType == ThemeType.Dark ? "bg-black" : "bg-white"
       )}
     >
@@ -24,7 +24,7 @@ export default function Information() {
         className={bgColor}
         trigger={() => setInfoVisible((prev) => !prev)}
       ></Exit>
-      <div className="flex flex-col p-5 gap-5 md:px-20 no-scrollbar">
+      <div className="flex flex-col p-5 gap-5 md:px-20">
         <p className={classNames(textColor, "text-2xl")}>Geist</p>
         <p className={classNames(textColor, "text-lg")}>
           &apos;Geist&apos;: /ɡaɪst/
@@ -43,8 +43,8 @@ export default function Information() {
           conscious intellectual achivement (including the Turing test, the
           General Language Understanding Evaluation, the Uniform Bar Exam, and
           many more), many of us recall a time when the technology was so
-          infantile that its only real use-cases were suggesting music on
-          Spotify and dominating in chess.
+          infantile that we understood its only viable use-cases to be
+          suggesting music on Spotify and dominating in chess.
         </p>
         <p className={classNames(textColor, "text-lg")}>
           Since the advent of the transformer architcture for large-language
