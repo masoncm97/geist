@@ -85,7 +85,8 @@ export default function Information() {
           and is in turn delivered to &apos;Sartre&apos;, returning with a
           question of its own to be delivered back to &apos;Hegel&apos;. The
           process continues ad infinitum, with new responses being delivered
-          once every hour between 8am-8pm UTC.
+          once every hour between 8am-8pm UTC. The ensuing conversation is
+          displayed in real time on the webpage.
         </p>
         <p className={classNames(textColor, "text-xl")}>Reflection</p>
         <p className={classNames(textColor, "text-lg")}>
