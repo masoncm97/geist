@@ -30,7 +30,7 @@ export default function Phones() {
   //   updatePhoneState("Geist", "responder", responder);
   // }, []);
 
-  // useAutoScroll();
+  useAutoScroll();
   usePaginate();
   useGetLatestChat();
 

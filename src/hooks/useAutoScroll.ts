@@ -46,5 +46,5 @@ export function useAutoScroll() {
       }
     }
     scrollMessages();
-  }, [responseLoading, promptLoading]);
+  }, []);
 }
