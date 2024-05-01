@@ -8,7 +8,7 @@ export default function Navbar() {
     useContext(NavbarContext);
   return (
     <>
-      <div className="block md:hidden justify-self-end self-center">
+      {/* <div className="block md:hidden justify-self-end self-center">
         <Hamburger
           isOpen={isOpen}
           triggerMobileNav={() => {
@@ -30,7 +30,13 @@ export default function Navbar() {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
+      <button
+        onClick={() => setInfoVisible((prev) => !prev)}
+        className="text-gray-400 block md:hidden justify-self-end self-center mr-5"
+      >
+        Information
+      </button>
     </>
   );
 }

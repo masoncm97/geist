@@ -6,6 +6,7 @@ import { Message } from "./Message";
 import MessageLoad from "./MessageLoad";
 import { useInView } from "framer-motion";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
+import { Interlocutor } from "@/store/store";
 
 export function Chat({
   className,
@@ -23,7 +24,7 @@ export function Chat({
     ResponseTimingContext
   );
 
-  const { updatePhoneState } = useAccessPhoneStore();
+  const { updatePhoneState, phoneStates } = useAccessPhoneStore();
 
   const latestChat = chatId === id;
 
@@ -32,6 +33,11 @@ export function Chat({
       updatePhoneState(name, "idInView", id);
     }
   }, [isInView]);
+
+  console.log(name);
+
+  const prompter: Interlocutor = { name: "Hegel", color: "pink" };
+  const responder: Interlocutor = { name: "Sartre", color: "green" };
 
   return (
     <div ref={ref} className={classNames(className, "mx-1 grid")}>
@@ -51,9 +57,10 @@ export function Chat({
             isPrompter ? "place-self-end" : "place-self-start",
             "max-w-[85%] mb-2"
           )}
-          outbound={isPrompter}
+          isPrompt={isPrompter}
           message={prompt}
           setChatRef={setChatRef}
+          interlocutor={prompter}
           id={id}
         />
       )}
@@ -73,9 +80,10 @@ export function Chat({
             isPrompter ? "place-self-start" : "place-self-end",
             "max-w-[85%] mb-2"
           )}
-          outbound={!isPrompter}
+          isPrompt={!isPrompter}
           message={response}
           setChatRef={setChatRef}
+          interlocutor={responder}
           id={id && id + 0.5}
         />
       )}

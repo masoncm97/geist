@@ -3,12 +3,20 @@ import { RefObject } from "react";
 import { create } from "zustand";
 
 type MergeStrategy = "replace" | "append" | "prepend";
+type Color = "green" | "yellow" | "pink";
+
+export type Interlocutor = {
+  name: string;
+  color: Color;
+};
 
 export type PhoneState = {
   chats?: ChatInstance[];
   head?: number;
   cursor?: number;
   shouldPaginate?: boolean;
+  prompter?: Interlocutor;
+  responder?: Interlocutor;
   idInView?: number;
   scroller?: HTMLDivElement;
 };

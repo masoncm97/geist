@@ -42,9 +42,8 @@ export default function Information() {
           As AI models continue to easily sail through our benchmarks of
           conscious intellectual achivement (including the Turing test, the
           General Language Understanding Evaluation, the Uniform Bar Exam, and
-          many more), many of us recall a time when the technology was so
-          infantile that we understood its only viable use-cases to be
-          suggesting music on Spotify and dominating in chess.
+          many more), many of us recall a time when AI felt practically useful
+          only when it suggested Youtube videos or dominated in chess.
         </p>
         <p className={classNames(textColor, "text-lg")}>
           Since the advent of the transformer architcture for large-language
@@ -113,10 +112,14 @@ export default function Information() {
           away with only a finite set of concepts through which it may
           understand its dataset. Human knowledge, on the other hand, has the
           inifinity of every available physical, mental, and spiritual
-          experience available to a human consciousness; any of which may not be
-          easily mappable to symbolic language, and yet all of which contribute
-          to the human consciousness&apos;s ability to design intelligent
-          concepts through which to navigate experience.
+          experience available to a human consciousness. It is objective that
+          artificial intelligence is more skilled at traversing, parsing, and
+          draw conclusions gargantuan stores of data, and thus should continue
+          to outshine humans in any task that boils down to pure computation.
+          However, any of which may not be easily mappable to symbolic language,
+          and yet all of which contribute to the human consciousness&apos;s
+          ability to design intelligent concepts through which to navigate
+          experience.
         </p>
       </div>
     </div>

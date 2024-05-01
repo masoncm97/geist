@@ -1,7 +1,11 @@
+import { Interlocutor } from "@/store/store";
+
 export interface MessageProps {
   className?: string;
   loading?: boolean;
-  outbound?: boolean;
+  // outbound?: boolean;
+  isPrompt?: boolean;
+  interlocutor: Interlocutor;
   handleUpdate?: () => void;
   skipUpdate?: boolean;
   message?: string;

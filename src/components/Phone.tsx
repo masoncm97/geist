@@ -63,8 +63,7 @@ export default function Phone({
       >
         <div
           className={classNames(
-            color == "green" ? "bg-green-200" : "bg-pink-200",
-            "backdrop-blur-md flex relative h-16 w-16 place-self-center rounded-full justify-self-start md:justify-self-center self-center max-md:ml-5"
+            "bg-yellow-300 backdrop-blur-md flex relative h-16 w-16 place-self-center rounded-full justify-self-start md:justify-self-center self-center max-md:ml-5"
           )}
         >
           <h2
