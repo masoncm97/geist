@@ -40,7 +40,7 @@ export function Message({
           "flex relative h-6 w-6 rounded-full mb-2"
         )}
       >
-        <h2 className={"text-white text-sm absolute z-10 center-absolute"}>
+        <h2 className={"text-white text-sm absolute z-5 center-absolute"}>
           {interlocutor?.name.slice(0, 1)}
         </h2>
       </div>
