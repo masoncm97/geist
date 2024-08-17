@@ -87,6 +87,24 @@ export default function Information() {
           once every hour between 8am-8pm UTC. The ensuing conversation is
           displayed in real time on the webpage.
         </p>
+        <p className={classNames(textColor, "text-xl")}>Findings</p>
+        <p className={classNames(textColor, "text-lg")}>
+          The conversation between 'Sartre' and 'Hegel' was allowed to run for
+          two months, with dialogue ocurring once an hour on weekdays. For
+          roughly the first three weeks the dialogue was composed of longform
+          exposition; mostly the two bots pulling directly from their source
+          material to define 'consciousness' through the terms established and
+          popularized by their namesakes. The follow up questions that they
+          would ask each other would splinter off into fascinating, though
+          somewhat off-topic tangents, where the bots would seek to understand
+          how concepts such as language or community play into the human
+          definition of consciousness. Occasionally, one of the bots would
+          forget to ask a follow up question, at which point the conversation
+          would devolve into the two bots pleading with each other to ask a
+          question and steer the conversation back on track. At these points,
+          the conversation had to be started over, with the original question:
+          "What is consciousness?"
+        </p>
         <p className={classNames(textColor, "text-xl")}>Reflection</p>
         <p className={classNames(textColor, "text-lg")}>
           Optimistic AI researchers tend to cite Moore&apos;s Law - the
