@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
 import { NavbarContext } from "@/providers/NavbarProvider";
-import Information from "./Information";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { Interlocutor } from "@/store/store";
 
@@ -20,7 +19,6 @@ export default function Phones() {
 
   const theme = useContext(ThemeContext);
   const { selected } = useContext(NavbarContext);
-  const { infoVisible, setInfoVisible } = useContext(NavbarContext);
   const { updatePhoneState } = useAccessPhoneStore();
   const prompter: Interlocutor = { name: "Sartre", color: "green" };
   const responder: Interlocutor = { name: "Hegel", color: "pink" };
@@ -36,14 +34,7 @@ export default function Phones() {
 
   return (
     <div className="min-h-screen relative no-scrollbar">
-      {infoVisible && <Information />}
       <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen">
-        <button
-          onClick={() => setInfoVisible((prev) => !prev)}
-          className="hidden md:block text-gray-400 md:fixed top-16 right-24"
-        >
-          Information
-        </button>
         {/* {phones.map((prop) => ( */}
         <Phone key={"Geist"} name={"Geist"} color={"green"} isPrompter={true} />
         {/* ))} */}

@@ -1,4 +1,4 @@
-import Phones from "@/components/Phones";
+import ConversationsView from "@/components/ConversationsView";
 import { Viewport } from "next";
 
 export const viewport: Viewport = {
@@ -8,10 +8,10 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function Home() {
+export default function ConversationsPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <Phones />
+      <ConversationsView />
     </main>
   );
-}
+} 

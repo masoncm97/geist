@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
 import NavbarProvider from "@/providers/NavbarProvider";
+import Navigation from "@/components/Navigation";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -19,7 +20,10 @@ export default function RootLayout({
       <body className="overflow-x-hidden no-scrollbar">
         <ResponseTimingProvider>
           <ThemeProvider>
-            <NavbarProvider>{children}</NavbarProvider>
+            <NavbarProvider>
+              <Navigation />
+              {children}
+            </NavbarProvider>
           </ThemeProvider>
         </ResponseTimingProvider>
       </body>
