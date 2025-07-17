@@ -1,9 +1,9 @@
 "use client";
 
 import Phone, { PhoneProps } from "@/components/Phone";
-import { usePaginate } from "@/hooks/usePaginate";
+import { useLocalPaginate } from "@/hooks/useLocalPaginate";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
-import { useGetLatestChat } from "@/hooks/useGetLatestChat";
+import { useLocalPhoneConversations } from "@/hooks/useLocalPhoneConversations";
 import { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ThemeContext, ThemeType } from "@/providers/ThemeProvider";
@@ -29,8 +29,8 @@ export default function Phones() {
   // }, []);
 
   useAutoScroll();
-  usePaginate();
-  useGetLatestChat();
+  useLocalPaginate();
+  useLocalPhoneConversations();
 
   return (
     <div className="min-h-screen relative no-scrollbar">
