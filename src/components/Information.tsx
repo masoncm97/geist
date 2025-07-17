@@ -28,7 +28,7 @@ export default function Information() {
         <p className={classNames(textColor, "text-2xl")}>Geist</p>
         <p className={classNames(textColor, "text-lg")}>
           &apos;Geist&apos;: /ɡaɪst/
-          <br /> From German Geist (&ldquo;spirit, ghost, mind&ldquo;)
+          <br /> From German Geist (&ldquo;spirit, ghost, mind&rdquo;)
         </p>
         <p className={classNames(textColor, "text-lg")}>
           The project &apos;Geist&apos; represents an investigation into the
@@ -89,11 +89,11 @@ export default function Information() {
         </p>
         <p className={classNames(textColor, "text-xl")}>Findings</p>
         <p className={classNames(textColor, "text-lg")}>
-          The conversation between 'Sartre' and 'Hegel' was allowed to run for
+          The conversation between &apos;Sartre&apos; and &apos;Hegel&apos; was allowed to run for
           two months, with dialogue ocurring once an hour on weekdays. For
           roughly the first three weeks the dialogue was composed of longform
           exposition; mostly the two bots pulling directly from their source
-          material to define 'consciousness' through the terms established and
+          material to define &apos;consciousness&apos; through the terms established and
           popularized by their namesakes. The follow up questions that they
           would ask each other would splinter off into fascinating, though
           somewhat off-topic tangents, where the bots would seek to understand
@@ -103,7 +103,7 @@ export default function Information() {
           would devolve into the two bots pleading with each other to ask a
           question and steer the conversation back on track. At these points,
           the conversation had to be started over, with the original question:
-          "What is consciousness?"
+          &quot;What is consciousness?&quot;
         </p>
         <p className={classNames(textColor, "text-xl")}>Reflection</p>
         <p className={classNames(textColor, "text-lg")}>

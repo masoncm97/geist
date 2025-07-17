@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { ThemeType } from "@/providers/ThemeProvider";
 import { MessageProps } from "@/types/message";
+import ReactMarkdown from "react-markdown";
 
 export function Message({
   className,
@@ -31,7 +32,21 @@ export function Message({
           className
         )}
       >
-        {message}
+        {message ? (
+          <ReactMarkdown
+            components={{
+              strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+              em: ({node, ...props}) => <em className="italic" {...props} />,
+              ul: ({node, ...props}) => <ul className="list-disc pl-6 my-2" {...props} />,
+              ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-2" {...props} />,
+              li: ({node, ...props}) => <li className="mb-1" {...props} />,
+              p: ({node, ...props}) => <p className="mb-2" {...props} />,
+              br: () => <br />,
+            }}
+          >
+            {message}
+          </ReactMarkdown>
+        ) : null}
       </div>
       <div
         className={classNames(
