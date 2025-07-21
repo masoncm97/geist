@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import classNames from "classnames";
 
 export enum ThemeType {
@@ -26,10 +26,13 @@ const getIsDark = () => {
 };
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  const isDark = getIsDark();
-  const currentTheme: Theme = isDark
-    ? { themeType: ThemeType.Dark }
-    : { themeType: ThemeType.Light };
+  const [currentTheme, setCurrentTheme] = useState<Theme>({ themeType: ThemeType.Light });
+
+  useEffect(() => {
+    // Update theme based on local time after component mounts
+    const isDark = getIsDark();
+    setCurrentTheme(isDark ? { themeType: ThemeType.Dark } : { themeType: ThemeType.Light });
+  }, []);
 
   return (
     <ThemeContext.Provider value={currentTheme}>
