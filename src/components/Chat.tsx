@@ -7,6 +7,7 @@ import MessageLoad from "./MessageLoad";
 import { useInView } from "framer-motion";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { Interlocutor } from "@/store/store";
+import { ThemeContext } from "@/providers/ThemeProvider";
 
 export function Chat({
   className,
@@ -25,6 +26,7 @@ export function Chat({
   );
 
   const { updatePhoneState, phoneStates } = useAccessPhoneStore();
+  const theme = useContext(ThemeContext);
 
   const latestChat = chatId === id;
 
@@ -61,6 +63,7 @@ export function Chat({
           message={prompt}
           setChatRef={setChatRef}
           interlocutor={prompter}
+          currentTheme={theme.themeType}
           id={id}
         />
       )}
@@ -84,6 +87,7 @@ export function Chat({
           message={response}
           setChatRef={setChatRef}
           interlocutor={responder}
+          currentTheme={theme.themeType}
           id={id && id + 0.5}
         />
       )}
