@@ -1,10 +1,10 @@
 "use client";
 
-import { useLocalConversations } from "@/hooks/useLocalConversations";
+import { useConversations } from "@/hooks/useConversations";
 import ReactMarkdown from "react-markdown";
 
 export default function ConversationsView() {
-  const { conversations, loading, error } = useLocalConversations();
+  const { conversations, loading, error } = useConversations();
 
   if (loading) {
     return (
