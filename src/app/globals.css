@@ -40,3 +40,17 @@
     transform: rotate(1turn);
   }
 }
+
+/* Ensure list items are aligned to the top and marker is aligned with text */
+ul, ol {
+  list-style-position: outside;
+  padding-left: 1.5rem;
+}
+li {
+  vertical-align: top;
+  align-items: flex-start;
+  display: list-item;
+}
+li::marker {
+  vertical-align: top;
+}

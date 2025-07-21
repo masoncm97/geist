@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import React from "react";
 
 interface Message {
   id: number;
@@ -46,8 +48,38 @@ export default function FullConversationPage() {
         </div>
         {messages.map((msg) => (
           <div key={msg.id}>
-            <div className="mb-10"><strong>Hegel:</strong> {msg.prompt}</div>
-            <div className="mb-10"><strong>Sartre:</strong> {msg.response}</div>
+            <div className="mb-10">
+              <strong>Hegel:</strong>{" "}
+              <ReactMarkdown
+                components={{
+                  strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                  em: ({ node, ...props }) => <em className="italic" {...props} />,
+                  ul: ({ node, ...props }) => <ul className="flex flex-col px-6" {...props} />,
+                  ol: ({ node, ...props }) => <ol className="flex flex-col px-6" {...props} />,
+                  li: ({ node, ...props }) => <li className="flex flex-col mb-1" {...props} />,
+                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  br: () => <br />,
+                }}
+              >
+                {msg.prompt}
+              </ReactMarkdown>
+            </div>
+            <div className="mb-10">
+              <strong>Sartre:</strong>{" "}
+              <ReactMarkdown
+                components={{
+                  strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                  em: ({ node, ...props }) => <em className="italic" {...props} />,
+                  ul: ({ node, ...props }) => <ul className="flex flex-col px-6" {...props} />,
+                  ol: ({ node, ...props }) => <ol className="flex flex-col px-6" {...props} />,
+                  li: ({ node, ...props }) => <li className="flex flex-col mb-1" {...props} />,
+                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  br: () => <br />,
+                }}
+              >
+                {msg.response}
+              </ReactMarkdown>
+            </div>
           </div>
         ))}
       </div>

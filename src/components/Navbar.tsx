@@ -4,13 +4,17 @@ import * as React from "react";
 import NavbarContent from "./NavbarContent";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+interface NavbarProps {
+  className?: string;
+}
+
+export default function Navbar({ className }: NavbarProps) {
   const pathname = usePathname();
 
   return (
     <>
       {pathname !== "/information" && (
-        <div className="hidden md:block fixed top-16 right-24 z-50">
+        <div className={`fixed top-16 right-24 z-50 ${className || ""}`}>
           <NavbarContent />
         </div>
       )}

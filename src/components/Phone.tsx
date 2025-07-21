@@ -80,7 +80,7 @@ export default function Phone({
         <h2 className="hidden md:block text-lg text-center text-gray-400 -translate-y-2">
           {name}
         </h2>
-        {/* <Navbar /> */}
+        <Navbar className="block md:hidden border-2 border-red-500"/>
       </div>
       <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
         <div className="absolute flex-col top-2 w-[95%]">
