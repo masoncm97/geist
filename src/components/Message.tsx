@@ -27,7 +27,7 @@ export function Message({
             ? "bg-royalBlue text-white"
             : currentTheme == ThemeType.Dark
             ? "bg-opacity-15 bg-white text-gray-400"
-            : "bg-opacity-5 bg-black text-gray-400",
+            : "bg-opacity-20 bg-white text-gray-300",
           "rounded-3xl py-3 px-3",
           className
         )}
