@@ -1,42 +1,19 @@
+"use client";
+
 import * as React from "react";
-import Hamburger from "./Hamburger";
-import { NavbarContext } from "@/providers/NavbarProvider";
-import { useContext } from "react";
+import NavbarContent from "./NavbarContent";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const { isOpen, setIsOpen, toggleSelected, setInfoVisible } =
-    useContext(NavbarContext);
+  const pathname = usePathname();
+
   return (
     <>
-      {/* <div className="block md:hidden justify-self-end self-center">
-        <Hamburger
-          isOpen={isOpen}
-          triggerMobileNav={() => {
-            setIsOpen((prevState) => !prevState);
-          }}
-        />
-      </div>
-      <div className="block md:hidden justify-self-end col-span-2 mr-2 text-right">
-        {isOpen && (
-          <div className="flex flex-col">
-            <button onClick={() => toggleSelected()} className="text-gray-400">
-              Toggle View
-            </button>
-            <button
-              onClick={() => setInfoVisible((prev) => !prev)}
-              className="text-gray-400"
-            >
-              Information
-            </button>
-          </div>
-        )}
-      </div> */}
-      <button
-        onClick={() => setInfoVisible((prev) => !prev)}
-        className="text-gray-400 block md:hidden justify-self-end self-center mr-5"
-      >
-        Information
-      </button>
+      {pathname !== "/information" && (
+        <div className="hidden md:block fixed top-16 right-24 z-50">
+          <NavbarContent />
+        </div>
+      )}
     </>
   );
 }

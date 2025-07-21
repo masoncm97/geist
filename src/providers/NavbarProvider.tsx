@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import { ResponseTimingContext } from "./ResponseTimingProvider";
-import Information from "@/components/Information";
 
 export interface Navbar {
   selected: string;

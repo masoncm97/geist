@@ -11,6 +11,7 @@ import { NavbarContext } from "@/providers/NavbarProvider";
 import Information from "./Information";
 import useAccessPhoneStore from "@/hooks/usePhoneStore";
 import { Interlocutor } from "@/store/store";
+import NavbarContent from "./NavbarContent";
 
 export default function Phones() {
   // let phones: PhoneProps[] = [
@@ -38,15 +39,10 @@ export default function Phones() {
     <div className="min-h-screen relative no-scrollbar">
       {infoVisible && <Information />}
       <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen">
-        <button
-          onClick={() => setInfoVisible((prev) => !prev)}
-          className="hidden md:block text-gray-400 md:fixed top-16 right-24"
-        >
-          Information
-        </button>
-        {/* {phones.map((prop) => ( */}
+        <div className="block md:hidden">
+          <NavbarContent />
+        </div>
         <Phone key={"Geist"} name={"Geist"} color={"green"} isPrompter={true} />
-        {/* ))} */}
       </div>
     </div>
   );
