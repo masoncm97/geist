@@ -20,7 +20,10 @@ export default function RootLayout({
       <body className="overflow-x-hidden no-scrollbar">
         <ResponseTimingProvider>
           <ThemeProvider>
-            <NavbarProvider> <Navbar />{children}</NavbarProvider>
+            <NavbarProvider>
+              <Navbar className="hidden md:block fixed top-16 right-24 z-50" />
+              {children}
+            </NavbarProvider>
           </ThemeProvider>
         </ResponseTimingProvider>
       </body>

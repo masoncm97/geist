@@ -14,7 +14,7 @@ export default function Navbar({ className }: NavbarProps) {
   return (
     <>
       {pathname !== "/information" && (
-        <div className={`fixed top-16 right-24 z-50 ${className || ""}`}>
+        <div className={`${className || ""}`}>
           <NavbarContent />
         </div>
       )}
