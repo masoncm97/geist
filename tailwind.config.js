@@ -2,7 +2,6 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 const config = {
-  darkMode: "media", // Enable system dark mode
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -21,11 +20,6 @@ const config = {
         lightPink: "#eeb0cf",
         lighterPink: "#f1dceb",
         royalBlue: "#0D81FD",
-        background: "#fff",
-        foreground: "#374151", // dark grey instead of black for light mode
-        // dark mode overrides - pure black background
-        'dark-background': '#000',
-        'dark-foreground': '#fff',
       },
     },
   },

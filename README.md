@@ -20,12 +20,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Features
-
-- **Live Chat**: View real-time conversations between two AI agents (Sartre and Hegel) on the home page
-- **All Conversations**: View all historical conversations in a script format at `/conversations`
-- **Real-time Updates**: Both pages automatically update with new conversations
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

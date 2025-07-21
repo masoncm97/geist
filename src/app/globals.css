@@ -2,24 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: theme(colors.background);
-  --foreground: theme(colors.foreground);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: theme(colors.dark-background);
-    --foreground: theme(colors.dark-foreground);
-  }
-}
-
-.bg-background {
-  background-color: var(--background);
-}
-.text-foreground {
-  color: var(--foreground);
-}
-
 .center-horizontal {
   @apply max-md:left-1/2 max-md:transform max-md:-translate-x-1/2;
 }
