@@ -26,11 +26,6 @@ export default function Phones() {
   const prompter: Interlocutor = { name: "Sartre", color: "green" };
   const responder: Interlocutor = { name: "Hegel", color: "pink" };
 
-  // useEffect(() => {
-  //   updatePhoneState("Geist", "prompter", prompter);
-  //   updatePhoneState("Geist", "responder", responder);
-  // }, []);
-
   useAutoScroll();
   usePaginate();
   useGetLatestChat();
@@ -38,7 +33,7 @@ export default function Phones() {
   return (
     <div className="min-h-screen relative no-scrollbar">
       {infoVisible && <Information />}
-      <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen">
+      <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen bg-red-500">
         <Phone key={"Geist"} name={"Geist"} color={"green"} isPrompter={true} />
       </div>
     </div>
