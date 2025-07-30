@@ -37,7 +37,11 @@ export default function FullConversationPage() {
   useEffect(() => {
     const fetchConversation = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+          }
+        });
         if (!res.ok) throw new Error("Failed to fetch conversation");
         const data = await res.json();
         if (Array.isArray(data.messages)) {

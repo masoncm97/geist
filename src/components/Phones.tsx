@@ -33,7 +33,7 @@ export default function Phones() {
   return (
     <div className="min-h-screen relative no-scrollbar">
       {infoVisible && <Information />}
-      <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen bg-red-500">
+      <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen">
         <Phone key={"Geist"} name={"Geist"} color={"green"} isPrompter={true} />
       </div>
     </div>

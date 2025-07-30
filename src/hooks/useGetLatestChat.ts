@@ -16,7 +16,11 @@ export function useGetLatestChat() {
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
-      .get(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`)
+      .get(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+        }
+      })
       .then((data) => {
         console.log(data);
         latestChat.current = data.data;

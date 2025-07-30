@@ -14,6 +14,10 @@ export function usePaginate() {
     await axios
       .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/paginate-chat`, {
         cursor: cursor,
+      }, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+        }
       })
       .then((data) => {
         let chats: ChatInstance[] = data.data.messages.reverse();
