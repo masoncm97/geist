@@ -26,7 +26,7 @@ export default function Phones() {
   const prompter: Interlocutor = { name: "Sartre", color: "green" };
   const responder: Interlocutor = { name: "Hegel", color: "pink" };
 
-  useAutoScroll();
+  // useAutoScroll();
   usePaginate();
   useGetLatestChat();
 

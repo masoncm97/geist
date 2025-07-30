@@ -23,12 +23,11 @@ export function useAutoScroll() {
         return;
       }
 
-      if (deviceSize && deviceSize < DeviceSize.md) {
+      if (deviceSize && deviceSize > DeviceSize.md) {
         let selectedPhone = Array.from(phoneStates.entries()).find(
           ([key, _]) => key == selected
         );
         if (selectedPhone) {
-          console.log("hey");
           let [_, phoneState] = selectedPhone;
           phoneState?.scroller?.scrollIntoView({
             behavior: "smooth",
