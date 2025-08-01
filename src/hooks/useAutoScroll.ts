@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
 import { delay } from "@/util/util";
@@ -7,11 +7,10 @@ import { DeviceSize } from "@/types/devices";
 import { NavbarContext } from "@/providers/NavbarProvider";
 
 export function useAutoScroll() {
-  const { responseLoading, promptLoading } = useContext(ResponseTimingContext);
-  const { selected } = useContext(NavbarContext);
   const { phoneState } = useAccessPhoneStore();
   const { infoVisible } = useContext(NavbarContext);
   const deviceSize = useDeviceSize();
+  const hasScrolledRef = useRef(false);
 
   useEffect(() => {
     console.log(deviceSize);
@@ -19,15 +18,18 @@ export function useAutoScroll() {
 
   useEffect(() => {
     async function scrollMessages() {
-      if (infoVisible) {
+      if (infoVisible || hasScrolledRef.current) {
         return;
       }
 
-      phoneState?.scroller?.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
+      if (phoneState?.chats && phoneState.chats.length > 0 && phoneState?.scroller) {
+        phoneState.scroller.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+        hasScrolledRef.current = true;
+      }
     }
     scrollMessages();
-  }, [infoVisible, phoneState?.scroller]);
+  }, [infoVisible, phoneState?.scroller, phoneState?.chats]);
 }
