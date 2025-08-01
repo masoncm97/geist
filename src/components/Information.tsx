@@ -18,12 +18,12 @@ export default function Information() {
   return (
     <div
       className={classNames(
-        "grid grid-rows-[min-content,1fr] overflow-y-auto min-h-screen",
+        "grid grid-rows-[min-content,1fr] overflow-y-auto min-h-screen pt-3 px-5 md:px-16 lg:px-64 lg:pt-24 ",
         theme.themeType == ThemeType.Dark ? "bg-black" : "bg-white"
       )}
     >
       <Exit className={bgColor} trigger={() => router.back()} />
-      <div className="max-w-full w-full pt-2 px-2 md:px-16 lg:px-64 lg:pt-24 flex flex-col gap-5">
+      <div className="max-w-full w-full flex flex-col gap-5">
         <p className={classNames(textColor, "text-2xl")}>Geist</p>
         <p className={classNames(textColor, "text-lg")}>&apos;Geist&apos;: /ɡaɪst/<br /> From German Geist (&ldquo;spirit, ghost, mind&rdquo;)</p>
         <p className={classNames(textColor, "text-lg")}>The project &apos;Geist&apos; represents an investigation into the capabilities of artificially intelligent reasoning and deduction, specifically, to determine whether or not artificially intelligent models can produce novel insight into the concept of &apos;consciousness&apos;. <br /></p>
