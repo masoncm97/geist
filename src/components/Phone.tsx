@@ -14,8 +14,6 @@ import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { useGetLatestChat } from "@/hooks/useGetLatestChat";
 import { useInitialChatLoad } from "@/hooks/useInitialChatLoad";
 import Information from "./Information";
-import Exit from "./Exit";
-import { useRouter } from "next/navigation";
 
 export interface PhoneProps {
   name?: string;
@@ -39,7 +37,6 @@ export default function Phone({
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
-  const router = useRouter();
 
   // Initialize hooks for chat management
   useInitialChatLoad(); // Handles unified initial loading
@@ -58,13 +55,9 @@ export default function Phone({
     updatePhoneState("shouldPaginate", isInView);
   }, [isInView, updatePhoneState]);
 
-  const bgColor = currentTheme == ThemeType.Dark ? "bg-gray-400" : "bg-gray-600";
-
   return (
     <div className="min-h-screen relative no-scrollbar">
       {infoVisible && <Information />}
-      {/* Mobile Exit button - positioned exactly like Information page */}
-      <Exit className={`block md:hidden ${bgColor}`} trigger={() => router.push("/information")} />
       <div className="fixed md:flex md:items-start md:justify-center gap-24 p-10 md:px-24 md:pt-28 h-screen w-screen">
         <section
           className={classNames(
@@ -102,7 +95,7 @@ export default function Phone({
             <h2 className="hidden md:block text-lg text-center text-gray-400 -translate-y-2">
               {name}
             </h2>
-            {/* Navbar hidden on mobile, replaced by Exit component above */}
+            <Navbar className="block md:hidden"/>
           </div>
           <div className="border-t-0 w-80 h-[70vh] rounded-b-xl p-2 justify-between relative bg-none overflow-y-auto no-scrollbar">
             <div className="absolute flex-col top-2 w-[95%]">
