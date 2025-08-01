@@ -18,7 +18,7 @@ export function useAutoScroll() {
 
   useEffect(() => {
     async function scrollMessages() {
-      if (infoVisible || hasScrolledRef.current) {
+      if (infoVisible) {
         return;
       }
 
@@ -27,7 +27,6 @@ export function useAutoScroll() {
           behavior: "smooth",
           block: "end",
         });
-        hasScrolledRef.current = true;
       }
     }
     scrollMessages();

@@ -19,6 +19,7 @@ export type PhoneState = {
   responder?: Interlocutor;
   idInView?: number;
   scroller?: HTMLDivElement;
+  hasInitialized?: boolean;
 };
 
 type PhoneStoreState = {
@@ -38,12 +39,18 @@ export type PhoneStore = PhoneStoreState & PhoneActions;
 
 export const usePhoneStore = create<PhoneStore>()((set, get) => ({
   phoneState: {},
-  updatePhoneState: (key, value, mergeStrategy = "replace") =>
-    set((state) => ({
-      phoneState: updateSinglePhoneState(key, value, state.phoneState, mergeStrategy),
-    })),
+  updatePhoneState: (key, value, mergeStrategy = "replace") => {
+    console.log("PhoneStore: updatePhoneState", { key, value, mergeStrategy });
+    set((state) => {
+      const newState = updateSinglePhoneState(key, value, state.phoneState, mergeStrategy);
+      console.log("PhoneStore: new state", newState);
+      return { phoneState: newState };
+    });
+  },
   getPhoneStateValue: (key) => {
-    return get().phoneState[key];
+    const value = get().phoneState[key];
+    console.log("PhoneStore: getPhoneStateValue", { key, value });
+    return value;
   },
 }));
 

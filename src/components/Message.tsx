@@ -10,7 +10,6 @@ export function Message({
   currentTheme,
   interlocutor,
 }: MessageProps) {
-  console.log(interlocutor);
   return (
     <>
       <p

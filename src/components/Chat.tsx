@@ -18,6 +18,7 @@ export function Chat({
   name,
   setChatRef,
 }: ChatProps) {
+
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref);
 
@@ -29,6 +30,7 @@ export function Chat({
   const theme = useContext(ThemeContext);
 
   const latestChat = chatId === id;
+  
 
   useEffect(() => {
     if (isInView) {
@@ -36,7 +38,6 @@ export function Chat({
     }
   }, [isInView, id, updatePhoneState]);
 
-  console.log(name);
 
   const prompter: Interlocutor = { name: "Hegel", color: "pink" };
   const responder: Interlocutor = { name: "Sartre", color: "green" };

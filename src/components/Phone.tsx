@@ -29,6 +29,7 @@ export default function Phone({
   isPrompter = true,
   className,
 }: PhoneProps) {
+  
   const messagesContainer = useRef<HTMLDivElement>(null);
   const theme = useContext(ThemeContext);
   const { infoVisible } = useContext(NavbarContext);
@@ -37,6 +38,7 @@ export default function Phone({
   const paginator = useRef<HTMLDivElement>(null);
   const isInView = useInView(paginator);
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
+
 
   // Initialize hooks for chat management
   useInitialChatLoad(); // Handles unified initial loading
@@ -105,21 +107,23 @@ export default function Phone({
               )}
               <div
                 ref={messagesContainer}
-                className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start h-[9999vh] relative mb-2"
+                className="flex flex-col-reverse overflow-y-auto no-scrollbar self-start min-h-full relative mb-2"
               >
                 <div ref={scroller} />
-                {phoneState?.chats?.map((chat, index) => (
-                  <Chat
-                    name={name}
-                    key={index}
-                    promptLoading={false}
-                    responseLoading={false}
-                    prompt={chat.prompt}
-                    response={chat.response}
-                    isPrompter={isPrompter}
-                    id={chat.id}
-                  />
-                ))}
+                {phoneState?.chats?.map((chat, index) => {
+                  return (
+                    <Chat
+                      name={name}
+                      key={chat.id}
+                      promptLoading={false}
+                      responseLoading={false}
+                      prompt={chat.prompt}
+                      response={chat.response}
+                      isPrompter={isPrompter}
+                      id={chat.id}
+                    />
+                  );
+                })}
                 <p
                   ref={paginator}
                   className="text-gray-400 text-sm text-center mt-32 mb-2 h-2 w-full"

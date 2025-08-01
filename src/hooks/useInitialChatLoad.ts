@@ -5,7 +5,6 @@ import { ChatInstance } from "@/types/message";
 import axios from "axios";
 
 export function useInitialChatLoad() {
-  const hasInitialized = useRef<boolean>(false);
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
   const { resetResponseTiming } = useContext(ResponseTimingContext);
 
@@ -55,6 +54,9 @@ export function useInitialChatLoad() {
       // Update state with all chats at once
       updatePhoneState("chats", uniqueChats);
       
+      // Mark as initialized in the store
+      updatePhoneState("hasInitialized", true);
+      
       // Don't trigger response timing for initial load
       // This prevents the artificial delays
       
@@ -64,10 +66,22 @@ export function useInitialChatLoad() {
   };
 
   useEffect(() => {
+    console.log("useInitialChatLoad: effect running", {
+      hasInitialized: phoneState.hasInitialized,
+      existingChats: phoneState.chats?.length || 0,
+      chats: phoneState.chats
+    });
+    
     const initializeChats = async () => {
-      if (!hasInitialized.current) {
+      // Only initialize if we haven't done so before AND there are no existing chats
+      if (!phoneState.hasInitialized && (!phoneState.chats || phoneState.chats.length === 0)) {
+        console.log("useInitialChatLoad: Loading initial chats...");
         await loadInitialChats();
-        hasInitialized.current = true;
+      } else {
+        console.log("useInitialChatLoad: Skipping initialization", {
+          hasInitialized: phoneState.hasInitialized,
+          existingChats: phoneState.chats?.length || 0
+        });
       }
     };
     
@@ -75,6 +89,6 @@ export function useInitialChatLoad() {
   }, []);
 
   return {
-    hasInitialized: hasInitialized.current
+    hasInitialized: phoneState.hasInitialized || false
   };
 }
