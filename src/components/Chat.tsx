@@ -43,8 +43,8 @@ export function Chat({
 
   return (
     <div ref={ref} className={classNames(className, "mx-1 grid")}>
-      {/* Loading Bubbles between chat instances */}
-      {latestChat && promptLoading && (
+      {/* Loading Bubbles before prompt - always show for latest chat or when prompt is loading */}
+      {(latestChat && promptLoading) && (
         <MessageLoad
           className={classNames(
             isPrompter ? "place-self-end" : "place-self-start",
@@ -52,7 +52,7 @@ export function Chat({
           )}
         />
       )}
-      {/* Chat Prompt instance */}
+      {/* Chat Prompt instance - always show unless it's the latest chat and prompt is still loading */}
       {(!latestChat || !promptLoading) && (
         <Message
           className={classNames(
@@ -67,8 +67,8 @@ export function Chat({
           id={id}
         />
       )}
-      {/* Loading Bubbles between prompt and response */}
-      {latestChat && !promptLoading && responseLoading && (
+      {/* Loading Bubbles between prompt and response - always show for latest chat or when response is loading */}
+      {(latestChat && !promptLoading && responseLoading) && (
         <MessageLoad
           className={classNames(
             isPrompter ? "place-self-start" : "place-self-end",
@@ -76,7 +76,7 @@ export function Chat({
           )}
         />
       )}
-      {/* Chat Response instance */}
+      {/* Chat Response instance - always show unless it's the latest chat and response is still loading */}
       {(!latestChat || !responseLoading) && (
         <Message
           className={classNames(
@@ -91,15 +91,13 @@ export function Chat({
           id={id && id + 0.5}
         />
       )}
-      {/* Loading Bubbles between chat instances */}
-      {latestChat && !responseLoading && !promptLoading && (
-        <MessageLoad
-          className={classNames(
-            isPrompter ? "place-self-end" : "place-self-start",
-            "mb-2"
-          )}
-        />
-      )}
+      {/* Loading Bubbles after response - always show */}
+      <MessageLoad
+        className={classNames(
+          isPrompter ? "place-self-end" : "place-self-start",
+          "mb-2"
+        )}
+      />
     </div>
   );
 }

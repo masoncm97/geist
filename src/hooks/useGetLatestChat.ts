@@ -1,67 +1,56 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
 import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
 import { useInterval } from "./useInterval";
 import { ChatInstance } from "@/types/message";
-import { PhoneState } from "@/store/store";
 import axios from "axios";
 
 export function useGetLatestChat() {
   let latestChat = useRef<ChatInstance>();
-  const fetchedInitChat = useRef<boolean>();
-
   const { resetResponseTiming } = useContext(ResponseTimingContext);
-
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
 
-  const getLatestChat = async (): Promise<number | undefined> => {
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+  const pollForNewChat = async (): Promise<void> => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`, 
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
+          }
         }
-      })
-      .then((data) => {
-        console.log(data);
-        latestChat.current = data.data;
-      });
-
-    /* If the server returns a new chat that hasn't been displayed yet,
-        add it to the current chats */
-    if (
-      latestChat.current != undefined &&
-      !phoneState.chats?.find((chat) => chat.id === latestChat.current?.id)
-    ) {
-      updatePhoneState(
-        "chats",
-        [latestChat.current] as ChatInstance[],
-        "prepend"
       );
-      updatePhoneState("head", latestChat.current.id);
-      resetResponseTiming(latestChat.current.id);
-    }
 
-    return latestChat.current?.id;
+      latestChat.current = response.data;
+
+      // Only add if this is a genuinely new chat that we don't have yet
+      if (
+        latestChat.current?.id &&
+        phoneState.head &&
+        latestChat.current.id > phoneState.head &&
+        !phoneState.chats?.find((chat) => chat.id === latestChat.current?.id)
+      ) {
+        console.log("New chat detected, adding to state");
+        updatePhoneState(
+          "chats",
+          [latestChat.current] as ChatInstance[],
+          "prepend"
+        );
+        updatePhoneState("head", latestChat.current.id);
+        
+        // Only trigger response timing for new chats (not initial load)
+        resetResponseTiming(latestChat.current.id);
+      }
+    } catch (error) {
+      console.error("Failed to poll for new chat:", error);
+    }
   };
 
-  useEffect(() => {
-    const instantiateChat = async () => {
-      if (!fetchedInitChat?.current) {
-        let initCursor = await getLatestChat();
-        if (typeof initCursor === "number") {
-          updatePhoneState("cursor", initCursor);
-        }
-        fetchedInitChat.current = true;
-      }
-    };
-    instantiateChat();
-  }, []);
-
-  //   If cursor has already been instantiated poll every 20 seconds for new chat
+  // Poll every 20 seconds for new chats (only after initial load is complete)
   useInterval(async () => {
-    if (fetchedInitChat.current) {
+    if (phoneState.chats && phoneState.chats.length > 0) {
       console.log("polling for latest chat");
-      getLatestChat();
+      await pollForNewChat();
     }
   }, 20000);
 }

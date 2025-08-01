@@ -12,6 +12,7 @@ import Navbar from "./Navbar";
 import { usePaginate } from "@/hooks/usePaginate";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { useGetLatestChat } from "@/hooks/useGetLatestChat";
+import { useInitialChatLoad } from "@/hooks/useInitialChatLoad";
 import Information from "./Information";
 
 export interface PhoneProps {
@@ -37,10 +38,11 @@ export default function Phone({
   const isInView = useInView(paginator);
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
 
-  // Initialize hooks that were in Phones.tsx
-  useAutoScroll();
-  usePaginate();
-  useGetLatestChat();
+  // Initialize hooks for chat management
+  useInitialChatLoad(); // Handles unified initial loading
+  useAutoScroll();      // Handles scroll to bottom on initial load
+  usePaginate();        // Handles scroll-triggered pagination
+  useGetLatestChat();   // Handles polling for new chats
 
   useEffect(() => {
     updatePhoneState(
