@@ -3,7 +3,6 @@ import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
 import NavbarProvider from "@/providers/NavbarProvider";
-import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -21,7 +20,6 @@ export default function RootLayout({
         <ResponseTimingProvider>
           <ThemeProvider>
             <NavbarProvider>
-              <Navbar className="hidden md:block fixed top-16 right-24 z-50" />
               {children}
             </NavbarProvider>
           </ThemeProvider>

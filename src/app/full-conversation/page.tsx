@@ -24,17 +24,6 @@ export default function FullConversationPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
     const fetchConversation = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, {
@@ -63,10 +52,7 @@ export default function FullConversationPage() {
 
   return (
     <main className="max-w-full w-full pt-2 px-2 md:px-16 lg:px-64 lg:pt-24">
-      {/* Only render Exit on mobile */}
-      {isMobile && (
-        <Exit className={classNames(bgColor, 'my-2')} trigger={() => router.back()} />
-      )}
+      <Exit className={classNames(bgColor, 'my-2')} trigger={() => router.back()} />
       <div className="my-12 mx-6 whitespace-pre-line text-gray-500">
         {messages.length === 0 && <div>No messages found.</div>}
         <div className="flex gap-2">
