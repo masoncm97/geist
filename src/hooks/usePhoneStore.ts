@@ -1,13 +1,13 @@
 import { PhoneStore, usePhoneStore } from "@/store/store";
 
-export default function useAccessPhoneStore(): PhoneStore {
+export default function useAccessPhoneStore() {
   let updatePhoneState = usePhoneStore().updatePhoneState;
-  let getPhoneStateValues = usePhoneStore().getPhoneStateValues;
-  let phoneStates = usePhoneStore().phoneStates;
+  let getPhoneStateValue = usePhoneStore().getPhoneStateValue;
+  let phoneState = usePhoneStore().phoneState;
 
   return {
     updatePhoneState,
-    getPhoneStateValues,
-    phoneStates,
+    getPhoneStateValue,
+    phoneState,
   };
 }

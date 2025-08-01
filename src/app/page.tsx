@@ -1,4 +1,4 @@
-import Phones from "@/components/Phones";
+import Phone from "@/components/Phone";
 import { Viewport } from "next";
 
 export const viewport: Viewport = {
@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 export default function Home() {
   return (
     <main>
-      <Phones />
+      <Phone />
     </main>
   );
 }

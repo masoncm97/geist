@@ -5,12 +5,12 @@ import { useEffect } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
 
 export function usePaginate() {
-  const { phoneStates, getPhoneStateValues, updatePhoneState } =
+  const { phoneState, getPhoneStateValue, updatePhoneState } =
     useAccessPhoneStore();
 
-  let shouldPaginate = getPhoneStateValues("shouldPaginate");
+  let shouldPaginate = getPhoneStateValue("shouldPaginate");
 
-  const getPreviousChats = async (cursor: number, name?: string) => {
+  const getPreviousChats = async (cursor: number) => {
     await axios
       .post(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/paginate-chat`, {
         cursor: cursor,
@@ -21,34 +21,25 @@ export function usePaginate() {
       })
       .then((data) => {
         let chats: ChatInstance[] = data.data.messages.reverse();
-        if (name) {
-          updatePhoneState(name, "chats", chats, "append");
-          return;
-        }
-
-        phoneStates.forEach(async (_, key: string) => {
-          updatePhoneState(key, "chats", chats, "append");
-        });
+        updatePhoneState("chats", chats, "append");
       });
   };
 
   useEffect(() => {
     const paginate = async () => {
-      phoneStates.forEach(async (value: PhoneState, key: string) => {
-        if (value.cursor && value.shouldPaginate) {
-          console.log("paginating");
-          let cursor;
-          if (value.cursor === value.head) {
-            console.log("yes", value.head);
-            cursor = value.cursor - 1;
-          } else {
-            cursor = value.cursor - 10;
-          }
-          updatePhoneState(key, "shouldPaginate", false);
-          updatePhoneState(key, "cursor", cursor);
-          await getPreviousChats(cursor, key);
+      if (phoneState.cursor && phoneState.shouldPaginate) {
+        console.log("paginating");
+        let cursor;
+        if (phoneState.cursor === phoneState.head) {
+          console.log("yes", phoneState.head);
+          cursor = phoneState.cursor - 1;
+        } else {
+          cursor = phoneState.cursor - 10;
         }
-      });
+        updatePhoneState("shouldPaginate", false);
+        updatePhoneState("cursor", cursor);
+        await getPreviousChats(cursor);
+      }
     };
     paginate();
   }, [shouldPaginate]);

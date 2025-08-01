@@ -21,75 +21,52 @@ export type PhoneState = {
   scroller?: HTMLDivElement;
 };
 
-type PhoneStates = {
-  phoneStates: Map<string, PhoneState>;
+type PhoneStoreState = {
+  phoneState: PhoneState;
 };
 
 type PhoneActions = {
   updatePhoneState: (
-    name: string,
     key: keyof PhoneState,
     value: any,
     mergeStrategy?: MergeStrategy
   ) => void;
-  getPhoneStateValues: <K extends keyof PhoneState>(key: K) => PhoneState[K][];
+  getPhoneStateValue: <K extends keyof PhoneState>(key: K) => PhoneState[K] | undefined;
 };
 
-export type PhoneStore = PhoneStates & PhoneActions;
+export type PhoneStore = PhoneStoreState & PhoneActions;
 
 export const usePhoneStore = create<PhoneStore>()((set, get) => ({
-  phoneStates: new Map<string, PhoneState>(),
-  updatePhoneState: (name, key, value, mergeStrategy = "replace") =>
+  phoneState: {},
+  updatePhoneState: (key, value, mergeStrategy = "replace") =>
     set((state) => ({
-      phoneStates: updatePhoneState(
-        name,
-        key,
-        value,
-        state.phoneStates,
-        mergeStrategy
-      ),
+      phoneState: updateSinglePhoneState(key, value, state.phoneState, mergeStrategy),
     })),
-  getPhoneStateValues: (key) => {
-    return Array.from(get().phoneStates.values())
-      .map((state) => state[key])
-      .filter(
-        (value): value is NonNullable<typeof value> => value !== undefined
-      );
+  getPhoneStateValue: (key) => {
+    return get().phoneState[key];
   },
 }));
 
-function updatePhoneState<K extends keyof PhoneState, V extends PhoneState[K]>(
-  name: string,
+function updateSinglePhoneState<K extends keyof PhoneState, V extends PhoneState[K]>(
   key: K,
   value: V | V[],
-  phoneStates: Map<string, PhoneState>,
+  phoneState: PhoneState,
   mergeStrategy: MergeStrategy = "replace"
-): Map<string, PhoneState> {
-  const existingEntry = phoneStates.get(name);
-
-  // If entry doesn't exist add it to the map
-  if (!existingEntry) {
-    phoneStates.set(name, { [key]: value });
-    return phoneStates;
-  }
-
+): PhoneState {
   let newValue = value;
 
   // If merge strategy is 'append' then append value to the end of the array
-  if (mergeStrategy === "append" && Array.isArray(existingEntry[key])) {
-    newValue = [...(existingEntry[key] as V[]), ...(value as V[])];
+  if (mergeStrategy === "append" && Array.isArray(phoneState[key])) {
+    newValue = [...(phoneState[key] as V[]), ...(value as V[])];
   }
 
   // If merge strategy is 'prepend' then prepend value to the front of the array
-  if (mergeStrategy === "prepend" && Array.isArray(existingEntry[key])) {
-    newValue = [...(value as V[]), ...(existingEntry[key] as V[])];
+  if (mergeStrategy === "prepend" && Array.isArray(phoneState[key])) {
+    newValue = [...(value as V[]), ...(phoneState[key] as V[])];
   }
 
-  // Add value to existing entry in map
-  phoneStates.set(name, {
-    ...existingEntry,
+  return {
+    ...phoneState,
     [key]: newValue,
-  });
-
-  return phoneStates;
+  };
 }

@@ -9,7 +9,7 @@ import { NavbarContext } from "@/providers/NavbarProvider";
 export function useAutoScroll() {
   const { responseLoading, promptLoading } = useContext(ResponseTimingContext);
   const { selected } = useContext(NavbarContext);
-  const { phoneStates } = useAccessPhoneStore();
+  const { phoneState } = useAccessPhoneStore();
   const { infoVisible } = useContext(NavbarContext);
   const deviceSize = useDeviceSize();
 
@@ -23,28 +23,11 @@ export function useAutoScroll() {
         return;
       }
 
-      if (deviceSize && deviceSize < DeviceSize.md) {
-        let selectedPhone = Array.from(phoneStates.entries()).find(
-          ([key, _]) => key == selected
-        );
-        if (selectedPhone) {
-          console.log("hey");
-          let [_, phoneState] = selectedPhone;
-          phoneState?.scroller?.scrollIntoView({
-            behavior: "smooth",
-            block: "end",
-          });
-        }
-      } else {
-        for (let [_, value] of phoneStates.entries()) {
-          value?.scroller?.scrollIntoView({
-            behavior: "smooth",
-            block: "end",
-          });
-          // await delay(2000);
-        }
-      }
+      phoneState?.scroller?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
     scrollMessages();
-  }, []);
+  }, [infoVisible, phoneState?.scroller]);
 }

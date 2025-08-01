@@ -25,16 +25,16 @@ export function Chat({
     ResponseTimingContext
   );
 
-  const { updatePhoneState, phoneStates } = useAccessPhoneStore();
+  const { updatePhoneState, phoneState } = useAccessPhoneStore();
   const theme = useContext(ThemeContext);
 
   const latestChat = chatId === id;
 
   useEffect(() => {
     if (isInView) {
-      updatePhoneState(name, "idInView", id);
+      updatePhoneState("idInView", id);
     }
-  }, [isInView]);
+  }, [isInView, id, updatePhoneState]);
 
   console.log(name);
 

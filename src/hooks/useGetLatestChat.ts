@@ -12,7 +12,7 @@ export function useGetLatestChat() {
 
   const { resetResponseTiming } = useContext(ResponseTimingContext);
 
-  const { phoneStates, updatePhoneState } = useAccessPhoneStore();
+  const { phoneState, updatePhoneState } = useAccessPhoneStore();
 
   const getLatestChat = async (): Promise<number | undefined> => {
     await axios
@@ -28,21 +28,18 @@ export function useGetLatestChat() {
 
     /* If the server returns a new chat that hasn't been displayed yet,
         add it to the current chats */
-    phoneStates.forEach(async (value: PhoneState, key: string) => {
-      if (
-        latestChat.current != undefined &&
-        !value.chats?.find((chat) => chat.id === latestChat.current?.id)
-      ) {
-        updatePhoneState(
-          key,
-          "chats",
-          [latestChat.current] as ChatInstance[],
-          "prepend"
-        );
-        updatePhoneState(key, "head", latestChat.current.id);
-        resetResponseTiming(latestChat.current.id);
-      }
-    });
+    if (
+      latestChat.current != undefined &&
+      !phoneState.chats?.find((chat) => chat.id === latestChat.current?.id)
+    ) {
+      updatePhoneState(
+        "chats",
+        [latestChat.current] as ChatInstance[],
+        "prepend"
+      );
+      updatePhoneState("head", latestChat.current.id);
+      resetResponseTiming(latestChat.current.id);
+    }
 
     return latestChat.current?.id;
   };
@@ -51,11 +48,9 @@ export function useGetLatestChat() {
     const instantiateChat = async () => {
       if (!fetchedInitChat?.current) {
         let initCursor = await getLatestChat();
-        phoneStates.forEach(async (_, key: string) => {
-          if (typeof initCursor === "number") {
-            updatePhoneState(key, "cursor", initCursor);
-          }
-        });
+        if (typeof initCursor === "number") {
+          updatePhoneState("cursor", initCursor);
+        }
         fetchedInitChat.current = true;
       }
     };
