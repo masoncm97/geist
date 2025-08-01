@@ -24,7 +24,7 @@ export default function InformationPage() {
       )}
     >
       <Exit className={bgColor} trigger={() => router.back()} />
-      <div className="max-w-full w-full flex flex-col gap-5">
+      <div className="max-w-full w-full flex flex-col gap-5 pt-28">
         <p className={classNames(textColor, "text-2xl")}>Geist</p>
         <p className={classNames(textColor, "text-lg")}>&apos;Geist&apos;: /ɡaɪst/<br /> From German Geist (&ldquo;spirit, ghost, mind&rdquo;)</p>
         <p className={classNames(textColor, "text-lg")}>The project &apos;Geist&apos; represents an investigation into the capabilities of artificially intelligent reasoning and deduction, specifically, to determine whether or not artificially intelligent models can produce novel insight into the concept of &apos;consciousness&apos;. <br /></p>
