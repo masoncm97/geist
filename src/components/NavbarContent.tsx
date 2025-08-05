@@ -12,7 +12,7 @@ export default function NavbarContent({ className = "" }: { className?: string }
   return (
     <div className={`pt-4 flex flex-col items-end md:gap-2 max-md:absolute max-md:top-0 max-md:right-0 ${className}`}>
       <Link
-        href={pathname === "/full-conversation" ? "/" : "/full-conversation"}
+        href={pathname === "/full-conversation" ? "/live-feed" : "/full-conversation"}
         className={buttonClass}
       >
         {pathname === "/full-conversation" ? "Live Feed" : "Full Conversation"}
