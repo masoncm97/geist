@@ -20,7 +20,6 @@ export default function FullConversationPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const bgColor = theme.themeType == ThemeType.Dark ? "bg-gray-400" : "bg-gray-600";
   const router = useRouter();
 
   useEffect(() => {
@@ -52,7 +51,7 @@ export default function FullConversationPage() {
 
   return (
     <main className="max-w-full w-full pt-28 px-2 md:px-16 lg:px-64">
-      <Exit className={classNames(bgColor, 'my-2')} trigger={() => router.back()} />
+      <Exit className={classNames('my-2')} trigger={() => router.back()} />
       <div className="my-12 mx-6 whitespace-pre-line text-gray-500">
         {messages.length === 0 && <div>No messages found.</div>}
         <div className="flex gap-2">

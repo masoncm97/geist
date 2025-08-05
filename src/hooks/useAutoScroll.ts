@@ -13,7 +13,6 @@ export function useAutoScroll() {
   const hasScrolledRef = useRef(false);
 
   useEffect(() => {
-    console.log(deviceSize);
   }, [deviceSize]);
 
   useEffect(() => {

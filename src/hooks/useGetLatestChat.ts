@@ -30,7 +30,6 @@ export function useGetLatestChat() {
         latestChat.current.id > phoneState.head &&
         !phoneState.chats?.find((chat) => chat.id === latestChat.current?.id)
       ) {
-        console.log("New chat detected, adding to state");
         updatePhoneState(
           "chats",
           [latestChat.current] as ChatInstance[],
@@ -49,7 +48,6 @@ export function useGetLatestChat() {
   // Poll every 20 seconds for new chats (only after initial load is complete)
   useInterval(async () => {
     if (phoneState.chats && phoneState.chats.length > 0) {
-      console.log("polling for latest chat");
       await pollForNewChat();
     }
   }, 20000);

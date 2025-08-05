@@ -11,8 +11,6 @@ export default function Information() {
   const theme = useContext(ThemeContext);
   const textColor =
     theme.themeType == ThemeType.Dark ? "text-gray-400" : "text-gray-600";
-  const bgColor =
-    theme.themeType == ThemeType.Dark ? "bg-gray-400" : "bg-gray-600";
   const router = useRouter();
 
   return (
@@ -22,7 +20,7 @@ export default function Information() {
         theme.themeType == ThemeType.Dark ? "bg-black" : "bg-white"
       )}
     >
-      <Exit className={bgColor} trigger={() => router.back()} />
+      <Exit trigger={() => router.back()} />
       <div className="max-w-full w-full flex flex-col gap-5">
         <p className={classNames(textColor, "text-2xl")}>Geist</p>
         <p className={classNames(textColor, "text-lg")}>&apos;Geist&apos;: /ɡaɪst/<br /> From German Geist (&ldquo;spirit, ghost, mind&rdquo;)</p>

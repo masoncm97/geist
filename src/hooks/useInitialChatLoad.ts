@@ -66,22 +66,10 @@ export function useInitialChatLoad() {
   };
 
   useEffect(() => {
-    console.log("useInitialChatLoad: effect running", {
-      hasInitialized: phoneState.hasInitialized,
-      existingChats: phoneState.chats?.length || 0,
-      chats: phoneState.chats
-    });
-    
     const initializeChats = async () => {
       // Only initialize if we haven't done so before AND there are no existing chats
       if (!phoneState.hasInitialized && (!phoneState.chats || phoneState.chats.length === 0)) {
-        console.log("useInitialChatLoad: Loading initial chats...");
         await loadInitialChats();
-      } else {
-        console.log("useInitialChatLoad: Skipping initialization", {
-          hasInitialized: phoneState.hasInitialized,
-          existingChats: phoneState.chats?.length || 0
-        });
       }
     };
     

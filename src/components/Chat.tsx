@@ -44,15 +44,7 @@ export function Chat({
 
   return (
     <div ref={ref} className={classNames(className, "mx-1 grid")}>
-      {/* Loading Bubbles before prompt - always show for latest chat or when prompt is loading */}
-      {(latestChat && promptLoading) && (
-        <MessageLoad
-          className={classNames(
-            isPrompter ? "place-self-end" : "place-self-start",
-            "mb-2"
-          )}
-        />
-      )}
+
       {/* Chat Prompt instance - always show unless it's the latest chat and prompt is still loading */}
       {(!latestChat || !promptLoading) && (
         <Message
@@ -66,15 +58,6 @@ export function Chat({
           interlocutor={prompter}
           currentTheme={theme.themeType}
           id={id}
-        />
-      )}
-      {/* Loading Bubbles between prompt and response - always show for latest chat or when response is loading */}
-      {(latestChat && !promptLoading && responseLoading) && (
-        <MessageLoad
-          className={classNames(
-            isPrompter ? "place-self-start" : "place-self-end",
-            "mb-2"
-          )}
         />
       )}
       {/* Chat Response instance - always show unless it's the latest chat and response is still loading */}
@@ -92,13 +75,14 @@ export function Chat({
           id={id && id + 0.5}
         />
       )}
-      {/* Loading Bubbles after response - always show */}
-      <MessageLoad
+      {(phoneState.head && phoneState.head == id) && (
+        <MessageLoad
         className={classNames(
           isPrompter ? "place-self-end" : "place-self-start",
           "mb-2"
         )}
       />
+      )}
     </div>
   );
 }

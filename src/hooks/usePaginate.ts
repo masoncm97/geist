@@ -43,8 +43,6 @@ export function usePaginate() {
         phoneState.chats && 
         phoneState.chats.length > 0
       ) {
-        console.log("paginating from scroll");
-        
         // Calculate next cursor for pagination
         const cursor = phoneState.cursor - 10;
         

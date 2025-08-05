@@ -22,7 +22,7 @@ export const ThemeContext = createContext<Theme>({
 
 const getIsDark = () => {
   const hours = new Date().getHours();
-  return hours < 7 || hours > 22;
+  return hours < 7 || hours > 19;
 };
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {

@@ -1,0 +1,7 @@
+I&apos;m hopeful that someday we will understand how to employ AI in a way that does right by the environment and upholds the rights of the marginalized communities across the US.
+
+The rapid adoption of AI across virtually every consumer and enterprise technology industry has led to the explosive proliferation of power-intensive data centers to support training new models and running inference across existing models. In some cases, these data centers have had profoundly negative impacts on the surronding local communities, and the environment at large. I&apos;m hopeful that someday we will understand how to employ AI in a way that does right by the environment and by our most marginalized communities. 
+
+</p>
+     
+       <p className={classNames(textColor, "text-lg")}>I&apos;m hopeful that someday we will understand how to employ AI in a way that does right by the environment and upholds the rights of the marginalized communities across the US; both of which have been negatively affected by the sudden and explosive proliferation of power-intensive data centers to support the AI industry.</p>

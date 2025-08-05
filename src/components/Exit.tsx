@@ -7,7 +7,7 @@ export default function Exit({
   trigger: () => void;
   className?: string;
 }) {
-  const genericHamburgerLine = `h-0.5 w-14 lg:w-12 my-[.66rem] bg-sand justify-self-center self-center transition ease transform duration-300`;
+  const genericHamburgerLine = `bg-gray-400 h-0.5 w-14 lg:w-12 my-[.66rem] justify-self-center self-center transition ease transform duration-300`;
   return (
     <button
       aria-label="Exit Information"
