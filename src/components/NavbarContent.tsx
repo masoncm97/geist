@@ -17,7 +17,7 @@ export default function NavbarContent({ className = "" }: { className?: string }
       >
         {pathname === "/full-conversation" ? "Live Feed" : "Full Conversation"}
       </Link>
-      <Link href="/information" className={buttonClass}>
+      <Link href="/" className={buttonClass}>
         Information
       </Link>
     </div>
