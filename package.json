@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "framer-motion": "^11.0.8",

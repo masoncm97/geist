@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ResponseTimingProvider from "@/providers/ResponseTimingProvider";
 import NavbarProvider from "@/providers/NavbarProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Geist",
@@ -24,6 +25,7 @@ export default function RootLayout({
             </NavbarProvider>
           </ThemeProvider>
         </ResponseTimingProvider>
+        <Analytics />
       </body>
     </html>
   );
