@@ -78,7 +78,13 @@ export function Chat({
       {(phoneState.head && phoneState.head == id) && (
         <MessageLoad
         className={classNames(
-          isPrompter ? "place-self-end" : "place-self-start",
+          // Position based on who is "typing" next:
+          // - Prompt still loading: prompter side (they're typing)
+          // - Prompt shown, response loading: responder side (they're typing)
+          // - Both shown: prompter side (next message's prompt incoming)
+          (latestChat && !promptLoading && responseLoading)
+            ? (isPrompter ? "place-self-start" : "place-self-end")
+            : (isPrompter ? "place-self-end" : "place-self-start"),
           "mb-2"
         )}
       />

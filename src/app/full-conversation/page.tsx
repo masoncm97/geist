@@ -7,6 +7,7 @@ import React from "react";
 import Exit from "@/components/Exit";
 import { useRouter } from "next/navigation";
 import classNames from "classnames";
+import { loadConversations } from "@/data/conversations";
 
 interface Message {
   id: number;
@@ -25,18 +26,8 @@ export default function FullConversationPage() {
   useEffect(() => {
     const fetchConversation = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_GEIST_SERVER}/chat`, {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
-          }
-        });
-        if (!res.ok) throw new Error("Failed to fetch conversation");
-        const data = await res.json();
-        if (Array.isArray(data.messages)) {
-          setMessages(data.messages);
-        } else {
-          setMessages([]);
-        }
+        const data = await loadConversations();
+        setMessages(data as Message[]);
       } catch (err: any) {
         setError(err.message || "Unknown error");
       } finally {
@@ -97,4 +88,4 @@ export default function FullConversationPage() {
       </div>
     </main>
   );
-} 
+}

@@ -1,8 +1,13 @@
-import { PhoneState } from "@/store/store";
 import { ChatInstance } from "@/types/message";
-import axios from "axios";
 import { useEffect } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
+import {
+  getAllConversations,
+  getOldestLoadedIndex,
+  setOldestLoadedIndex,
+} from "./useInitialChatLoad";
+
+const PAGE_SIZE = 10;
 
 export function usePaginate() {
   const { phoneState, getPhoneStateValue, updatePhoneState } =
@@ -10,47 +15,28 @@ export function usePaginate() {
 
   let shouldPaginate = getPhoneStateValue("shouldPaginate");
 
-  const getPreviousChats = async (cursor: number) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_GEIST_SERVER}/paginate-chat`, 
-        {
-          cursor: cursor,
-        }, 
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
-          }
-        }
-      );
-
-      let chats: ChatInstance[] = response.data.messages.reverse();
-      updatePhoneState("chats", chats, "append");
-    } catch (error) {
-      console.error("Failed to paginate chats:", error);
-    }
-  };
-
   useEffect(() => {
-    const paginate = async () => {
-      // Only paginate if:
-      // 1. We should paginate (scroll triggered)
-      // 2. We have a cursor set
-      // 3. We already have chats loaded (not initial load)
-      if (
-        phoneState.cursor && 
-        phoneState.shouldPaginate && 
-        phoneState.chats && 
-        phoneState.chats.length > 0
-      ) {
-        // Calculate next cursor for pagination
-        const cursor = phoneState.cursor - 10;
-        
-        updatePhoneState("shouldPaginate", false);
-        updatePhoneState("cursor", cursor);
-        await getPreviousChats(cursor);
-      }
-    };
-    paginate();
+    if (
+      !phoneState.shouldPaginate ||
+      !phoneState.chats ||
+      phoneState.chats.length === 0
+    ) {
+      return;
+    }
+
+    updatePhoneState("shouldPaginate", false);
+
+    const all = getAllConversations();
+    const currentOldest = getOldestLoadedIndex();
+
+    if (currentOldest <= 0) return; // no older messages
+
+    const newStart = Math.max(0, currentOldest - PAGE_SIZE);
+    const olderChats = all.slice(newStart, currentOldest);
+    setOldestLoadedIndex(newStart);
+
+    // Older chats need to be reversed (newest first) then appended to the end
+    updatePhoneState("chats", [...olderChats].reverse() as ChatInstance[], "append");
+    updatePhoneState("cursor", newStart);
   }, [shouldPaginate]);
 }

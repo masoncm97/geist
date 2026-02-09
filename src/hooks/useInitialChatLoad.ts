@@ -1,65 +1,61 @@
-import { useContext, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import useAccessPhoneStore from "./usePhoneStore";
-import { ResponseTimingContext } from "@/providers/ResponseTimingProvider";
+import { loadConversations } from "@/data/conversations";
 import { ChatInstance } from "@/types/message";
-import axios from "axios";
+
+// Module-level state shared with other hooks
+let allConversations: ChatInstance[] = [];
+let nextDripIndex = 0;
+// Index of the oldest message currently loaded in the store (in allConversations)
+let oldestLoadedIndex = 0;
+
+export function getAllConversations() {
+  return allConversations;
+}
+
+export function getNextDripIndex() {
+  return nextDripIndex;
+}
+
+export function setNextDripIndex(index: number) {
+  nextDripIndex = index;
+}
+
+export function getOldestLoadedIndex() {
+  return oldestLoadedIndex;
+}
+
+export function setOldestLoadedIndex(index: number) {
+  oldestLoadedIndex = index;
+}
+
+// How many messages to hold back for the drip feed
+const DRIP_RESERVE = 50;
+// How many messages to show initially (most recent visible ones)
+const INITIAL_VISIBLE = 20;
 
 export function useInitialChatLoad() {
   const { phoneState, updatePhoneState } = useAccessPhoneStore();
-  const { resetResponseTiming } = useContext(ResponseTimingContext);
 
   const loadInitialChats = async (): Promise<void> => {
     try {
-      // First, get the latest chat to establish head and cursor
-      const latestResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_GEIST_SERVER}/latest-chat`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
-          }
-        }
-      );
+      const conversations = await loadConversations();
+      allConversations = conversations;
 
-      const latestChat: ChatInstance = latestResponse.data;
-      
-      if (!latestChat?.id) return;
+      // The drip feed starts at this index
+      const dripStart = Math.max(0, conversations.length - DRIP_RESERVE);
+      nextDripIndex = dripStart;
 
-      // Set up the head and cursor
-      updatePhoneState("head", latestChat.id);
-      updatePhoneState("cursor", latestChat.id - 1);
+      // Show the last INITIAL_VISIBLE messages before the drip boundary
+      const visibleStart = Math.max(0, dripStart - INITIAL_VISIBLE);
+      const visibleSlice = conversations.slice(visibleStart, dripStart);
+      oldestLoadedIndex = visibleStart;
 
-      // Now get initial batch of chats including the latest
-      const paginateResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_GEIST_SERVER}/paginate-chat`,
-        {
-          cursor: latestChat.id - 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
-          }
-        }
-      );
-
-      let initialChats: ChatInstance[] = paginateResponse.data.messages.reverse();
-      
-      // Prepend the latest chat to ensure it's included
-      const allChats = [latestChat, ...initialChats];
-      
-      // Remove duplicates based on ID
-      const uniqueChats = allChats.filter((chat, index, self) => 
-        index === self.findIndex(c => c.id === chat.id)
-      );
-
-      // Update state with all chats at once
-      updatePhoneState("chats", uniqueChats);
-      
-      // Mark as initialized in the store
+      // chats in store are newest-first
+      updatePhoneState("chats", [...visibleSlice].reverse());
+      updatePhoneState("head", visibleSlice[visibleSlice.length - 1].id);
+      updatePhoneState("cursor", visibleStart);
       updatePhoneState("hasInitialized", true);
-      
-      // Don't trigger response timing for initial load
-      // This prevents the artificial delays
-      
     } catch (error) {
       console.error("Failed to load initial chats:", error);
     }
@@ -67,16 +63,18 @@ export function useInitialChatLoad() {
 
   useEffect(() => {
     const initializeChats = async () => {
-      // Only initialize if we haven't done so before AND there are no existing chats
-      if (!phoneState.hasInitialized && (!phoneState.chats || phoneState.chats.length === 0)) {
+      if (
+        !phoneState.hasInitialized &&
+        (!phoneState.chats || phoneState.chats.length === 0)
+      ) {
         await loadInitialChats();
       }
     };
-    
+
     initializeChats();
   }, []);
 
   return {
-    hasInitialized: phoneState.hasInitialized || false
+    hasInitialized: phoneState.hasInitialized || false,
   };
 }
